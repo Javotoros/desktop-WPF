@@ -8,23 +8,23 @@
     "net8.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\javorotor\\.nuget\\packages\\": {},
+    "C:\\Users\\migagumor\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Proyecto_final\\WPF_HoteL_Deportivo\\DesktopApp\\DesktopApp\\DesktopApp.csproj",
+      "projectUniqueName": "C:\\Users\\migagumor\\Desktop\\Proyecto\\AplicacionC#\\DesktopApp\\DesktopApp\\DesktopApp.csproj",
       "projectName": "DesktopApp",
-      "projectPath": "D:\\Proyecto_final\\WPF_HoteL_Deportivo\\DesktopApp\\DesktopApp\\DesktopApp.csproj",
-      "packagesPath": "C:\\Users\\javorotor\\.nuget\\packages\\",
-      "outputPath": "D:\\Proyecto_final\\WPF_HoteL_Deportivo\\DesktopApp\\DesktopApp\\obj\\",
+      "projectPath": "C:\\Users\\migagumor\\Desktop\\Proyecto\\AplicacionC#\\DesktopApp\\DesktopApp\\DesktopApp.csproj",
+      "packagesPath": "C:\\Users\\migagumor\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\migagumor\\Desktop\\Proyecto\\AplicacionC#\\DesktopApp\\DesktopApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\javorotor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\migagumor\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

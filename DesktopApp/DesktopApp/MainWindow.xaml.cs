@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using DesktopApp.ViewModels;
+using DesktopApp.Views;
+using DesktopApp.Views.Reservas;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +22,12 @@ namespace DesktopApp
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ReservasListar_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new ListReservationView();
+
         }
     }
 }

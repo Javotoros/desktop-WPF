@@ -24,11 +24,35 @@
         </Style>
 
         <!-- Hover -->
+       <!-- Estilo para submenús (Nuevo, Listar) -->
         <Style TargetType="MenuItem" x:Key="SubMenuItemStyle">
+            <Setter Property="Background" Value="#2D2F36"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="Height" Value="35"/>
-            <Setter Property="Padding" Value="20,0"/>
-            <Setter Property="Foreground" Value="#DDDDDD"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <!-- Border con ancho fijo -->
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" Width="164">
+                            <ContentPresenter ContentSource="Header"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#444857"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="Gray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
     </Window.Resources>
     <Grid>
         <!-- COLUMNAS PRINCIPALES -->
@@ -58,19 +82,19 @@
           Background="#2D2F36"
           Foreground="White">
 
-            <MenuItem Header="Gestión de Empleados">
+            <MenuItem Header="Gestión de Empleados"  ItemContainerStyle="{StaticResource SubMenuItemStyle}">
                 <MenuItem Header="Nuevo"/>
                 <MenuItem Header="Listar"/>
             </MenuItem>
 
-            <MenuItem Header="Gestión de Habitaciones">
+            <MenuItem Header="Gestión de Habitaciones" ItemContainerStyle="{StaticResource SubMenuItemStyle}" >
                 <MenuItem Header="Nuevo"/>
                 <MenuItem Header="Listar"/>
             </MenuItem>
 
-            <MenuItem Header="Gestión de Reservas">
+            <MenuItem Header="Gestión de Reservas"  ItemContainerStyle="{StaticResource SubMenuItemStyle}">
                 <MenuItem Header="Nuevo"/>
-                <MenuItem Header="Listar"/>
+                <MenuItem Header="Listar" Click="ReservasListar_Click"/>
             </MenuItem>
         </Menu>
 
@@ -80,7 +104,7 @@
             Padding="15">
             <DockPanel LastChildFill="False">
 
-                <!-- IMAGEN USUARIO -->
+                <!-- IMAGEN USUARIO 
                 <Ellipse DockPanel.Dock="Right"
                      Width="45"
                      Height="45"
@@ -89,7 +113,7 @@
                         <ImageBrush ImageSource="/Assets/user.png"/>
                     </Ellipse.Fill>
                 </Ellipse>
-
+                -->
                 <!-- TEXTO USUARIO -->
                 <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center">
                     <TextBlock Text="Juan Pérez"
@@ -110,13 +134,13 @@
         </Border>
         
         <!--CONTENIDO PRINCIPAL -->
-        <Grid Grid.Row="1" Grid.Column="1"
-          Background="AntiqueWhite">
-            <TextBlock Text="Contenido principal"
-                   FontSize="24"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
-        </Grid>
+        <Border Grid.Row="1" Grid.Column="1"
+        Background="AntiqueWhite"
+        Padding="20">
+
+            <ContentControl x:Name="MainContent"/>
+
+        </Border>
 
     </Grid>
 </Window>
