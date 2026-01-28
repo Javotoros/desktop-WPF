@@ -1,22 +1,69 @@
-# Visual Studio
-.vs/
-*.user
-*.suo
+########################################
+# .NET / Visual Studio / WPF
+########################################
 
 # Build results
 bin/
 obj/
 
-# Generated files
-*.g.cs
-*.g.i.cs
-*.cache
-*.vsidx
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
 
-# NuGet
-*.nupkg
-project.assets.json
-project.nuget.cache
+# Rider / JetBrains
+.idea/
 
-# Logs
+########################################
+# Logs / temp
+########################################
 *.log
+*.tmp
+*.bak
+*.swp
+
+########################################
+# OS generated files
+########################################
+.DS_Store
+Thumbs.db
+desktop.ini
+
+########################################
+# NuGet
+########################################
+packages/
+*.nupkg
+*.snupkg
+
+########################################
+# Publish
+########################################
+publish/
+
+########################################
+# Secrets / config (si usas alguno)
+########################################
+appsettings.Development.json
+secrets.json
+
+########################################
+# Test results
+########################################
+TestResults/
+
+########################################
+# Backup files
+########################################
+*.old
+*.orig
+
+########################################
+# Rider / ReSharper
+########################################
+_ReSharper*/
+*.DotSettings.user
