@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DesktopApp.Views.Reservas.ListReservationView"
+﻿<UserControl x:Class="DesktopApp.Views.Reservation.ListReservationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,19 +6,27 @@
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
-        
-        <DataGrid x:Name="dgReservas"
+        <StackPanel Orientation="Vertical" Margin="10">
+            <!-- Botón para crear nueva reserva -->
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button Content="Nueva Reserva" Width="150" Height="35" Margin="0,0,0,10" Click="BtnNuevaReserva_Click"/>
+                <Button Content="Cancelar Reserva" Width="150" Height="35" Margin="10,0,0,10" Click="BtnCancelarReserva_Click"/>
+                
+            </StackPanel>
+            <DataGrid x:Name="dgReservation"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   Margin="10">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*" />
-                <DataGridTextColumn Header="Usuario" Binding="{Binding UserId}" Width="*" />
-                <DataGridTextColumn Header="Habitación" Binding="{Binding RoomId}" Width="*" />
-                <DataGridTextColumn Header="Entrada" Binding="{Binding CheckIn, StringFormat=dd/MM/yyyy}" Width="*" />
-                <DataGridTextColumn Header="Salida" Binding="{Binding CheckOut, StringFormat=dd/MM/yyyy}" Width="*" />
-                <DataGridTextColumn Header="Estado" Binding="{Binding Status}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*" />
+                    <DataGridTextColumn Header="Usuario" Binding="{Binding UserId}" Width="*" />
+                    <DataGridTextColumn Header="Habitación" Binding="{Binding RoomId}" Width="*" />
+                    <DataGridTextColumn Header="Entrada" Binding="{Binding CheckIn, StringFormat=dd/MM/yyyy}" Width="*" />
+                    <DataGridTextColumn Header="Salida" Binding="{Binding CheckOut, StringFormat=dd/MM/yyyy}" Width="*" />
+                    <DataGridTextColumn Header="Estado" Binding="{Binding Status}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="DesktopApp.Views.Reservation.AddReservationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600">
+
+    <Border Background="White" Padding="20" CornerRadius="10" Margin="10" BorderBrush="#DDD" BorderThickness="1">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="350">
+
+            <TextBlock Text="Crear Nueva Reserva" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" TextAlignment="Center"/>
+
+            <!-- Nombre del cliente -->
+            <TextBlock Text="Nombre del Cliente" FontWeight="SemiBold" Margin="0,5,0,2"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="txtCliente" Height="30" Width="250" />
+                <Button Content="Buscar" Height="30" Margin="10,0,0,0" Click="BtnBuscarCliente_Click"/>
+            </StackPanel>
+            <TextBlock x:Name="lblClienteInfo" FontSize="12" Foreground="Gray" />
+
+            <!-- Habitación -->
+            <TextBlock Text="Habitación" FontWeight="SemiBold" Margin="0,5,0,2"/>
+            <ComboBox x:Name="cbHabitaciones" Height="30" />
+
+            <!-- Fecha de Entrada -->
+            <TextBlock Text="Fecha de Entrada" FontWeight="SemiBold" Margin="0,10,0,2"/>
+            <DatePicker x:Name="dpCheckIn" Height="30"/>
+
+            <!-- Fecha de Salida -->
+            <TextBlock Text="Fecha de Salida" FontWeight="SemiBold" Margin="0,10,0,2"/>
+            <DatePicker x:Name="dpCheckOut" Height="30"/>
+
+            <!-- Estado -->
+            <TextBlock Text="Estado" FontWeight="SemiBold" Margin="0,10,0,2"/>
+            <ComboBox x:Name="cbEstado" Height="30">
+                <ComboBoxItem Content="confirmada" IsSelected="True"/>
+                <ComboBoxItem Content="cancelada"/>
+                <ComboBoxItem Content="checkin"/>
+                <ComboBoxItem Content="checkout"/>
+            </ComboBox>
+
+            <!-- Botón Crear -->
+            <Button Content="Crear Reserva" Height="35" Margin="0,20,0,0" Background="#2D2F36" Foreground="White" Click="BtnCrearReserva_Click"/>
+        </StackPanel>
+    </Border>
+</UserControl>

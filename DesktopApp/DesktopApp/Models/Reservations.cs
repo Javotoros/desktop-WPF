@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DesktopApp.Models
 {
-    public class Reservation
+    public class Reservations
     {
         [JsonPropertyName("_id")]
         public string Id { get; set; }
