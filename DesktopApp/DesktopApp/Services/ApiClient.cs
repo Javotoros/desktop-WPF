@@ -41,5 +41,15 @@ namespace DesktopApp.Services
                 });
         }
 
+        public async Task<List<Rooms>> GetRoomsPerBooking()
+        {
+            var response = await _httpClient.GetAsync("rooms");
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var rooms = JsonSerializer.Deserialize<List<Rooms>>(json);
+            return rooms;
+        }
+
     }
 }

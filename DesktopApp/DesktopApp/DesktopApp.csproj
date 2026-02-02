@@ -9,13 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Images\logo.png" />
+    <None Remove="Resources\Images\E-R-Proyectoj-Final.png" />
+    <None Remove="Resources\Images\IconHotel.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Images\logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Resources\Images\E-R-Proyectoj-Final.png" />
+    <Resource Include="Resources\Images\IconHotel.png" />
   </ItemGroup>
 
 </Project>
