@@ -48,7 +48,7 @@ namespace DesktopApp.Controls
                     break;
 
                 case "rooms":
-                    main.Navigate(new RoomsView()); // IMPORTANTE: RoomsView debe ser UserControl, no Window
+                    main.Navigate(new ListRoomsView()); 
                     break;
             }
         }

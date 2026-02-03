@@ -1,0 +1,253 @@
+﻿<Window x:Class="DesktopApp.Views.FormRoomsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopApp.Views"
+        mc:Ignorable="d"
+        Title="FormRoomsView" Height="450" Width="800">
+    <Grid Margin="26">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ====== Header ====== -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Crear Nueva Habitación" FontSize="34" FontWeight="Bold"/>
+                <TextBlock Text="Complete los datos para registrar una nueva habitación en el sistema"
+                           Style="{StaticResource MutedText}" Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <Button Grid.Column="1"
+                    Style="{StaticResource PrimaryButton}"
+                    Content="Guardar  ➜"
+                    Command="{Binding SaveCommand}"
+                    Margin="12,6,0,0"/>
+        </Grid>
+
+        <!-- ====== Content ====== -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- Row 1: Basic + Price -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Información Básica -->
+                    <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Información Básica" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Número de Habitación" Style="{StaticResource Label}"/>
+                                    <TextBox Style="{StaticResource InputTextBox}"
+                                             Text="{Binding RoomNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Piso" Style="{StaticResource Label}"/>
+                                    <TextBox Style="{StaticResource InputTextBox}"
+                                             Text="{Binding Floor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Text="Tipo de Habitación" Style="{StaticResource Label}"/>
+                            <ComboBox MinHeight="40"
+                                      Background="#FFF3F4F6"
+                                      BorderBrush="#FFE5E7EB"
+                                      BorderThickness="1"
+                                      Padding="10,6"
+                                      SelectedItem="{Binding SelectedRoomType}"
+                                      ItemsSource="{Binding RoomTypes}">
+                                <ComboBox.Template>
+                                    <ControlTemplate TargetType="ComboBox">
+                                        <Border CornerRadius="10" Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <ToggleButton IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                              Background="Transparent" BorderThickness="0"/>
+                                                <ContentPresenter Margin="12,0,36,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="▾" Margin="0,0,12,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                           Foreground="#FF6B7280"/>
+                                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True">
+                                                    <Border CornerRadius="10" BorderBrush="#FFE5E7EB" BorderThickness="1" Background="White" Margin="0,6,0,0">
+                                                        <ScrollViewer MaxHeight="240">
+                                                            <ItemsPresenter/>
+                                                        </ScrollViewer>
+                                                    </Border>
+                                                </Popup>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ComboBox.Template>
+                            </ComboBox>
+
+                            <TextBlock Text="Descripción" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <TextBox Style="{StaticResource InputTextBox}"
+                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="110"
+                                     VerticalContentAlignment="Top"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Precio y Disponibilidad -->
+                    <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Precio y Disponibilidad" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                            <TextBlock Text="Precio por Noche (€)" Style="{StaticResource Label}"/>
+                            <TextBox Style="{StaticResource InputTextBox}"
+                                     Text="{Binding PricePerNight, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+                            <TextBlock Text="Capacidad Máxima (personas)" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <DockPanel>
+                                <TextBox Style="{StaticResource InputTextBox}"
+                                         Text="{Binding MaxOccupancy, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                         DockPanel.Dock="Left"/>
+                            </DockPanel>
+
+                            <TextBlock Text="Disponibilidad" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <ComboBox MinHeight="40"
+                                      Background="#FFF3F4F6"
+                                      BorderBrush="#FFE5E7EB"
+                                      BorderThickness="1"
+                                      Padding="10,6"
+                                      SelectedItem="{Binding SelectedAvailability}"
+                                      ItemsSource="{Binding AvailabilityOptions}"/>
+
+                            <CheckBox Content="Oferta activa"
+                                      IsChecked="{Binding IsOffer}"
+                                      Margin="0,16,0,0"
+                                      Foreground="#FF111827"
+                                      FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Row 2: Imágenes + Reseñas -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Imágenes -->
+                    <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Imágenes de la Habitación" FontSize="18" FontWeight="Bold" Margin="0,0,0,14"/>
+
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         Style="{StaticResource InputTextBox}"
+                                         Text="{Binding ImageUrlDraft, UpdateSourceTrigger=PropertyChanged}"
+                                         ToolTip="Pega una URL válida (https://...)"
+                                         />
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource PrimaryButton}"
+                                        Content="＋ Agregar"
+                                        Command="{Binding AddImageCommand}"/>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding Images}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,0,10">
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding}" Foreground="#FF374151" TextTrimming="CharacterEllipsis" />
+                                                <Button DockPanel.Dock="Right"
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Padding="10,6"
+                                                        Content="Eliminar"
+                                                        Command="{Binding DataContext.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <TextBlock Text="Tip: aquí puedes mostrar miniaturas si luego descargas la imagen."
+                                       Style="{StaticResource MutedText}" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Reseñas -->
+                    <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Reseñas" FontSize="18" FontWeight="Bold" Margin="0,0,0,14"/>
+
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         Style="{StaticResource InputTextBox}"
+                                         Text="{Binding ReviewDraft, UpdateSourceTrigger=PropertyChanged}"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         MinHeight="70"
+                                         VerticalContentAlignment="Top"
+                                         />
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource SecondaryButton}"
+                                        Content="＋ Agregar"
+                                        Command="{Binding AddReviewCommand}"/>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding Reviews}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,0,10">
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding}" Foreground="#FF374151" TextWrapping="Wrap" Width="360"/>
+                                                <Button DockPanel.Dock="Right"
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Padding="10,6"
+                                                        Content="Eliminar"
+                                                        Command="{Binding DataContext.RemoveReviewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

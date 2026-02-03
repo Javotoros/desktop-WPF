@@ -10,20 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DesktopApp.Controls
+namespace DesktopApp.Views
 {
     /// <summary>
-    /// Lógica de interacción para RoomsListView.xaml
+    /// Interaction logic for FormRoomsView.xaml
     /// </summary>
-    public partial class RoomsListView : UserControl
+    public partial class FormRoomsView : Window
     {
-        public RoomsListView()
+        public FormRoomsView()
         {
             InitializeComponent();
-
         }
     }
 }
