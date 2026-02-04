@@ -4,6 +4,7 @@ using DesktopApp.Views.Reservation;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using DesktopApp.Models;
 
 namespace DesktopApp.Views.Reservation
 {

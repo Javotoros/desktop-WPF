@@ -26,38 +26,60 @@ namespace DesktopApp.Services
 
         public async Task<List<Reservations>> GetReservasAsync()
         {
-            var response = await _httpClient.GetAsync("/reservations");
+            var response = await _httpClient.GetAsync("reservations");
 
             if (!response.IsSuccessStatusCode)
                 return new List<Reservations>();
 
             var json = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<List<Reservations>>(
-                json,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-        }
+            var bookings =  JsonSerializer.Deserialize<List<Reservation>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
 
-        public async Task<bool> CancelReservationAsync(string id)
+            return bookings ?? new List<Reservation>();
+        }
+        public async Task<List<Rooms>> GetRooms()
         {
-            var url = $"/reservations/delete/{id}";
+            var response = await _httpClient.GetAsync("rooms");
+            response.EnsureSuccessStatusCode();
 
-            var response = await _httpClient.DeleteAsync(url);
+            var json = await response.Content.ReadAsStringAsync();
 
-            if (response.IsSuccessStatusCode)
+            var rooms = JsonSerializer.Deserialize<List<Rooms>>(json, new JsonSerializerOptions
             {
-                return true;
-            }
-            else
-            {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Error al cancelar reserva: {error}");
-            }
+                PropertyNameCaseInsensitive = true
+            });
+            return rooms ?? new List<Rooms>();
         }
+        public async Task<bool> PostRooms(int numFloor, string roomType, string description,
+                    string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
+        {
+            try
+            {
+                var values = new Dictionary<string, string>()
+                {
+                    { "numFloor", numFloor.ToString()},
+                    { "roomType",roomType},
+                    { "description",description},
+                    { "image",image},
+                    { "pricePerNight",pricePerNight.ToString()},
+                    { "reviews",reviews},
+                    { "maxOccupancy",maxOccupancy.ToString()},
+                    { "availability",availability}
+                 };
+                var content = new FormUrlEncodedContent(values);
+                var response = await _httpClient.PostAsync("add", content);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
 
 
+        }
     }
 }
