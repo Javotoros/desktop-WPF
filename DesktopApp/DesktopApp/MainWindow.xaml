@@ -5,142 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-
-    <Window.Resources>
-
-        <!-- Estilo del Menu -->
-        <Style TargetType="Menu">
-            <Setter Property="Background" Value="#2D2F36"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-        <!-- Estilo MenuItem principal -->
-        <Style TargetType="MenuItem">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Padding" Value="15,0"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-
-        <!-- Hover -->
-       <!-- Estilo para submenús (Nuevo, Listar) -->
-        <Style TargetType="MenuItem" x:Key="SubMenuItemStyle">
-            <Setter Property="Background" Value="#2D2F36"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="Padding" Value="10,0"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="MenuItem">
-                        <!-- Border con ancho fijo -->
-                        <Border x:Name="Border" Background="{TemplateBinding Background}" Width="164">
-                            <ContentPresenter ContentSource="Header"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#444857"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="Gray"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-    </Window.Resources>
-    <Grid>
-        <!-- COLUMNAS PRINCIPALES -->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
+        xmlns:controls="clr-namespace:DesktopApp.Controls"
+        Title="MainWindow" Height="720" Width="1280" MinWidth="1024" MinHeight="600">
+   
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <!-- FILAS PRINCIPALES -->
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- LOGO -->
-        <Border Grid.Row="0" Grid.Column="0"
-            Background="#2D2F36"
-            Padding="10">
-            <Image Source="/Resources/Images/logo.png"
-               Height="50"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Center"/>
-        </Border>
 
-        <!-- MENÚ -->
-        <Menu Grid.Row="1" Grid.Column="0"
-          Background="#2D2F36"
-          Foreground="White">
+        <controls:HeaderControl Grid.Row="0" Grid.Column="1"  Height="60"/>
 
-            <MenuItem Header="Gestión de Empleados"  ItemContainerStyle="{StaticResource SubMenuItemStyle}">
-                <MenuItem Header="Nuevo"/>
-                <MenuItem Header="Listar"/>
-            </MenuItem>
+        <controls:navControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"/>
 
-            <MenuItem Header="Gestión de Habitaciones" ItemContainerStyle="{StaticResource SubMenuItemStyle}" >
-                <MenuItem Header="Nuevo"/>
-                <MenuItem Header="Listar"/>
-            </MenuItem>
 
-            <MenuItem Header="Gestión de Reservas"  ItemContainerStyle="{StaticResource SubMenuItemStyle}">
-                <MenuItem Header="Nuevo"/>
-                <MenuItem Header="Listar" Click="ReservasListar_Click"/>
-            </MenuItem>
-        </Menu>
 
-        <!-- CABECERA USUARIO -->
-        <Border Grid.Row="0" Grid.Column="1"
-            Background="#F5F5F5"
-            Padding="15">
-            <DockPanel LastChildFill="False">
-
-                <!-- IMAGEN USUARIO 
-                <Ellipse DockPanel.Dock="Right"
-                     Width="45"
-                     Height="45"
-                     Margin="10,0,0,0">
-                    <Ellipse.Fill>
-                        <ImageBrush ImageSource="/Assets/user.png"/>
-                    </Ellipse.Fill>
-                </Ellipse>
-                -->
-                <!-- TEXTO USUARIO -->
-                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center">
-                    <TextBlock Text="Juan Pérez"
-                        FontWeight="Bold"
-                        FontSize="14"/>
-                    <TextBlock Text="Administrador"
-                        FontSize="11"
-                        Foreground="Gray"/>
-                </StackPanel>
-
-                <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
-                    <TextBlock Text="Hotel Pere Maria"
-                        FontWeight="Bold"
-                        FontSize="40"/>
-                </StackPanel>
-
-            </DockPanel>
-        </Border>
-        
-        <!--CONTENIDO PRINCIPAL -->
-        <Border Grid.Row="1" Grid.Column="1"
-        Background="AntiqueWhite"
-        Padding="20">
-
-            <ContentControl x:Name="MainContent"/>
-
-        </Border>
+        <ContentControl x:Name="MainContent" Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="12" />
 
     </Grid>
 </Window>
+ 

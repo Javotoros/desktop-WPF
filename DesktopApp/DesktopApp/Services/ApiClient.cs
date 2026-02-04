@@ -26,20 +26,60 @@ namespace DesktopApp.Services
 
         public async Task<List<Reservation>> GetReservasAsync()
         {
-            var response = await _httpClient.GetAsync("/reservations");
+            var response = await _httpClient.GetAsync("reservations");
 
             if (!response.IsSuccessStatusCode)
                 return new List<Reservation>();
 
             var json = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<List<Reservation>>(
-                json,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-        }
+            var bookings =  JsonSerializer.Deserialize<List<Reservation>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
 
+            return bookings ?? new List<Reservation>();
+        }
+        public async Task<List<Rooms>> GetRooms()
+        {
+            var response = await _httpClient.GetAsync("rooms");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var rooms = JsonSerializer.Deserialize<List<Rooms>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return rooms ?? new List<Rooms>();
+        }
+        public async Task<bool> PostRooms(int numFloor, string roomType, string description,
+                    string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
+        {
+            try
+            {
+                var values = new Dictionary<string, string>()
+                {
+                    { "numFloor", numFloor.ToString()},
+                    { "roomType",roomType},
+                    { "description",description},
+                    { "image",image},
+                    { "pricePerNight",pricePerNight.ToString()},
+                    { "reviews",reviews},
+                    { "maxOccupancy",maxOccupancy.ToString()},
+                    { "availability",availability}
+                 };
+                var content = new FormUrlEncodedContent(values);
+                var response = await _httpClient.PostAsync("add", content);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+
+        }
     }
 }

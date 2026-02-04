@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace DesktopApp.Views
 {
     /// <summary>
-    /// Interaction logic for RoomsView.xaml
+    /// Interaction logic for FormRoomsView.xaml
     /// </summary>
-    public partial class RoomsView : Window
+    public partial class FormRoomsView : Window
     {
-        public RoomsView()
+        public FormRoomsView()
         {
             InitializeComponent();
         }

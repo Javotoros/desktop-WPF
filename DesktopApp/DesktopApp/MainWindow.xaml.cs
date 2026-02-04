@@ -29,5 +29,9 @@ namespace DesktopApp
             MainContent.Content = new ListReservationView();
 
         }
+        public void Navigate(UserControl view)
+        {
+            MainContent.Content = view;
+        }
     }
 }

@@ -1,7 +1,7 @@
-﻿using DesktopApp.Models;
-using DesktopApp.Services;
+﻿using DesktopApp.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using DesktopApp.Models;
 
 namespace DesktopApp.Views.Reservas
 {
