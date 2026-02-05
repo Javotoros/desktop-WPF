@@ -33,13 +33,31 @@ namespace DesktopApp.Services
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var bookings =  JsonSerializer.Deserialize<List<Reservation>>(json, new JsonSerializerOptions
+            var bookings =  JsonSerializer.Deserialize<List<Reservations>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            return bookings ?? new List<Reservation>();
+            return bookings ?? new List<Reservations>();
         }
+
+        public async Task<bool> CancelReservationAsync(string reservationId)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"delete/{reservationId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return false;
+
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<Rooms>> GetRooms()
         {
             var response = await _httpClient.GetAsync("rooms");

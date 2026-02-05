@@ -24,21 +24,39 @@ namespace DesktopApp.Views.Reservation
             CargarReservas();
         }
 
+        /* private async void CargarReservas()
+         {
+             var lista = await _apiClient.GetReservasAsync();
+             try
+             {
+
+                 Reservas.Clear();
+                 foreach (var r in lista)
+                     Reservas.Add(r);
+             }
+             catch (Exception ex)
+             {
+                 MessageBox.Show("Error al cargar reservas: " + ex.Message);
+             }
+         }*/
         private async void CargarReservas()
         {
-            var lista = await _apiClient.GetReservasAsync();
             try
             {
-
+                var lista = await _apiClient.GetReservasAsync();
                 Reservas.Clear();
+
                 foreach (var r in lista)
+                {
                     Reservas.Add(r);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar reservas: " + ex.Message);
             }
         }
+
 
         private void BtnNuevaReserva_Click(object sender, System.Windows.RoutedEventArgs e)
         {

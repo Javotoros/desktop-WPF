@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using DesktopApp.Views;
-using DesktopApp.Views.Reservas;
+using DesktopApp.Views.Reservation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
