@@ -71,6 +71,21 @@ namespace DesktopApp.Services
             });
             return rooms ?? new List<Rooms>();
         }
+
+        public async Task<Rooms> GetRoomsId(string id)
+        {
+            var response = await _httpClient.GetAsync($"rooms/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var rooms = JsonSerializer.Deserialize<Rooms>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return rooms;
+        }
+
         public async Task<bool> PostRooms(int numFloor, string roomType, string description,
                     string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
         {

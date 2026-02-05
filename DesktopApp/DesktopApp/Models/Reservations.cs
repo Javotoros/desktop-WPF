@@ -22,15 +22,5 @@ namespace DesktopApp.Models
         public string Status { get; set; }
 
         
-        /*public string RoomNumbers
-        {
-
-            get
-            {
-                if (RoomIds == null || !RoomIds.Any()) return "s";
-                return string.Join(", ", RoomIds.Select(r => r.numRoom));
-            }
-     
-        }*/
     }
 }
