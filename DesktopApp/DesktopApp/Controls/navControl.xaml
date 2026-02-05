@@ -11,8 +11,6 @@
          Width="80"
          Padding="8"
          Background="{StaticResource BackgroundBrush2}">
-
-            <!-- Hover: anima el mismo Border -->
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
@@ -48,24 +46,25 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Image Grid.Row="0"
+                <Image Grid.Row="0" 
                 Source="/Resources/Images/IconHotel.png"
                 Stretch="Uniform"
-                Height="250"
+                Height="150"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"/>
 
                 <ListBox x:Name="MainMenu"
-         Grid.Row="1"
-         Style="{StaticResource SidebarListBoxStyle}"
-         ItemContainerStyle="{StaticResource SidebarItemStyle}"
-         SelectionChanged="MainMenu_SelectionChanged">
+                         Background="Transparent"
+                        Grid.Row="1"
+                        BorderThickness="0"
+                        ItemContainerStyle="{StaticResource SidebarItemStyle}"
+                        SelectionChanged="MainMenu_SelectionChanged">
 
                     <ListBoxItem Tag="dashboard" Margin="10 10">
                         <StackPanel Orientation="Horizontal">
                             <Path Fill="{StaticResource PrimaryBrush}"
-                           Width="18" Height="18" Stretch="Uniform"
-                           Data="{StaticResource IcoDashboard}"/>
+                                    Width="18" Height="18" Stretch="Uniform"
+                                    Data="{StaticResource IcoDashboard}"/>
                             <TextBlock Text="Dashboard"
                                 Margin="12,0,0,0"
                                 VerticalAlignment="Center"
@@ -115,8 +114,9 @@
                 <StackPanel Grid.Row="2" Margin="0,10,0,0">
                     <Separator Opacity="0.25"/>
 
-                    <ListBox Style="{StaticResource SidebarListBoxStyle}"
-                      ItemContainerStyle="{StaticResource SidebarItemStyle}">
+                    <ListBox x:Name="SubMenu" Background="Transparent" BorderThickness="0"
+                      ItemContainerStyle="{StaticResource SidebarItemStyle}"
+                             SelectionChanged="MainMenu2_SelectionChanged">
 
                         <ListBoxItem>
                             <StackPanel Orientation="Horizontal">

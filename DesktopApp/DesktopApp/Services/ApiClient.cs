@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DesktopApp.Services
@@ -38,7 +39,7 @@ namespace DesktopApp.Services
                 PropertyNameCaseInsensitive = true
             });
 
-            return bookings ?? new List<Reservation>();
+            return bookings;
         }
         public async Task<List<Rooms>> GetRooms()
         {
@@ -49,9 +50,23 @@ namespace DesktopApp.Services
 
             var rooms = JsonSerializer.Deserialize<List<Rooms>>(json, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() }
             });
-            return rooms ?? new List<Rooms>();
+            return rooms ;
+        }
+        public async Task<int> GetNextRoom(int numFloor)
+        {
+            var response = await _httpClient.GetAsync($"/rooms/nextRoom/{numFloor}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(json);
+            }
+            int newRoom = JsonSerializer.Deserialize<int> (json);
+            return newRoom;
         }
         public async Task<bool> PostRooms(int numFloor, string roomType, string description,
                     string image, int pricePerNight, string reviews, int maxOccupancy, string availability)

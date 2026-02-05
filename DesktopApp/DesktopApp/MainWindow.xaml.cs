@@ -24,11 +24,7 @@ namespace DesktopApp
             InitializeComponent();
         }
 
-        private void ReservasListar_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new ListReservationView();
-
-        }
+        
         public void Navigate(UserControl view)
         {
             MainContent.Content = view;

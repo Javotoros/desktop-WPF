@@ -51,6 +51,18 @@ namespace DesktopApp.Controls
                     main.Navigate(new ListRoomsView()); 
                     break;
             }
+            if (MainMenu.SelectedItem != null )
+            {
+                SubMenu.SelectedIndex = -1;
+            }
+        }
+
+        private void MainMenu2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SubMenu.SelectedItem != null)
+            {
+                MainMenu.SelectedIndex = -1;
+            }
         }
     }
 }

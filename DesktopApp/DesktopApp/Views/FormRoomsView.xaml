@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopApp.Views"
         mc:Ignorable="d"
-        Title="FormRoomsView" Height="450" Width="800">
+        Title="FormRoomsView" Height="720" Width="1200" MinWidth="820" MinHeight="720">
     <Grid Margin="26">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,21 +15,55 @@
         <!-- ====== Header ====== -->
         <Grid Grid.Row="0" Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel>
                 <TextBlock Text="Crear Nueva Habitación" FontSize="34" FontWeight="Bold"/>
                 <TextBlock Text="Complete los datos para registrar una nueva habitación en el sistema"
-                           Style="{StaticResource MutedText}" Margin="0,6,0,0"/>
+                            Margin="0,6,0,0"/>
             </StackPanel>
 
-            <Button Grid.Column="1"
-                    Style="{StaticResource PrimaryButton}"
-                    Content="Guardar  ➜"
+            <Button Grid.Column="2"
+                    Style="{StaticResource SecondaryButton }"
                     Command="{Binding SaveCommand}"
-                    Margin="12,6,0,0"/>
+                    Margin="10">
+                <Button.Template >
+                    <ControlTemplate TargetType="Button" >
+                        <Border CornerRadius="25" Background="{StaticResource OkBrush}" Padding="10">
+                            <TextBlock Text="Guardar" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Grid.Column="3"
+                    Style="{StaticResource SecondaryButton }"
+                    Command="{Binding SaveCommand}"
+                    Margin="10">
+                <Button.Template >
+                    <ControlTemplate TargetType="Button" >
+                        <Border CornerRadius="25" Background="{StaticResource UpdateBrush}" Padding="10">
+                            <TextBlock Text="Limpiar" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Grid.Column="4  "
+                    Style="{StaticResource SecondaryButton }"
+                    Command="{Binding SaveCommand}"
+                    Margin="10">
+                <Button.Template >
+                    <ControlTemplate TargetType="Button" >
+                        <Border CornerRadius="25" Background="{StaticResource CancelBrush}" Padding="10">
+                            <TextBlock Text="Cancelar" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
 
         <!-- ====== Content ====== -->
@@ -57,49 +91,28 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Número de Habitación" Style="{StaticResource Label}"/>
-                                    <TextBox Style="{StaticResource InputTextBox}"
-                                             Text="{Binding RoomNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                    <TextBlock Text="Número de Habitación " Style="{StaticResource Label}"/>
+                                    <TextBlock MinHeight="40"
+                                               Padding="10"
+                                               VerticalAlignment="Center"
+                                               Background="#FFF3F4F6"
+                                             Text="{Binding NextRoom}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Piso" Style="{StaticResource Label}"/>
-                                    <TextBox Style="{StaticResource InputTextBox}"
-                                             Text="{Binding Floor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                    <TextBox x:Name="numFloorText" Style="{StaticResource InputTextBox}"
+                                             Text="{Binding NewFloor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
                                 </StackPanel>
                             </Grid>
 
                             <TextBlock Text="Tipo de Habitación" Style="{StaticResource Label}"/>
                             <ComboBox MinHeight="40"
-                                      Background="#FFF3F4F6"
-                                      BorderBrush="#FFE5E7EB"
                                       BorderThickness="1"
                                       Padding="10,6"
+                                      ItemsSource="{Binding RoomTypes}"
                                       SelectedItem="{Binding SelectedRoomType}"
-                                      ItemsSource="{Binding RoomTypes}">
-                                <ComboBox.Template>
-                                    <ControlTemplate TargetType="ComboBox">
-                                        <Border CornerRadius="10" Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}">
-                                            <Grid>
-                                                <ToggleButton IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                              Background="Transparent" BorderThickness="0"/>
-                                                <ContentPresenter Margin="12,0,36,0" VerticalAlignment="Center"/>
-                                                <TextBlock Text="▾" Margin="0,0,12,0" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                           Foreground="#FF6B7280"/>
-                                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True">
-                                                    <Border CornerRadius="10" BorderBrush="#FFE5E7EB" BorderThickness="1" Background="White" Margin="0,6,0,0">
-                                                        <ScrollViewer MaxHeight="240">
-                                                            <ItemsPresenter/>
-                                                        </ScrollViewer>
-                                                    </Border>
-                                                </Popup>
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </ComboBox.Template>
-                            </ComboBox>
+                                      />
 
                             <TextBlock Text="Descripción" Style="{StaticResource Label}" Margin="0,14,0,0"/>
                             <TextBox Style="{StaticResource InputTextBox}"
@@ -129,18 +142,11 @@
 
                             <TextBlock Text="Disponibilidad" Style="{StaticResource Label}" Margin="0,14,0,0"/>
                             <ComboBox MinHeight="40"
-                                      Background="#FFF3F4F6"
-                                      BorderBrush="#FFE5E7EB"
                                       BorderThickness="1"
                                       Padding="10,6"
                                       SelectedItem="{Binding SelectedAvailability}"
                                       ItemsSource="{Binding AvailabilityOptions}"/>
 
-                            <CheckBox Content="Oferta activa"
-                                      IsChecked="{Binding IsOffer}"
-                                      Margin="0,16,0,0"
-                                      Foreground="#FF111827"
-                                      FontWeight="SemiBold"/>
                         </StackPanel>
                     </Border>
                 </Grid>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesktopApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,8 @@ namespace DesktopApp.Views
         public FormRoomsView()
         {
             InitializeComponent();
+            DataContext = new RoomsViewModel();
         }
+
     }
 }

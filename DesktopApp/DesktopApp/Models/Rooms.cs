@@ -9,8 +9,9 @@ namespace DesktopApp.Models
     public class Rooms
     {
         public int numRoom { get; set; }
-        public int roomFloor { get; set; }
-        public enum roomType { Single, Double, Triple, Fourfold}
+        public int numFloor { get; set; }
+        public enum RoomType { Single, Double, Triple, Fourfold}
+        public RoomType roomType { get; set; }
         public string description { get; set; }
 
         public List<string> image { get; set; }
@@ -19,6 +20,7 @@ namespace DesktopApp.Models
         public int maxOccupancy{ get; set; }
 
         public List<string> reviews { get; set; }
-        public  enum availability {  Available, Unavailable,Block }
+        public  enum Availability {  Available, Unavailable,Block }
+        public Availability availability { get; set; }
     }
 }

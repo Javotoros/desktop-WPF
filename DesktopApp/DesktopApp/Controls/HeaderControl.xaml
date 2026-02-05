@@ -11,13 +11,9 @@
     <Border Background="{StaticResource SecondaryBrushDark}" Padding="16,10">
         <Grid VerticalAlignment="Center">
             <Grid.ColumnDefinitions >
-                
                 <ColumnDefinition Width="*"/>
-                <!-- buscador -->
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
-            
             
             <Border Grid.Column="0"
                     Height="38"
@@ -64,53 +60,32 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Width="40" Height="40" Padding="6"
-        VerticalAlignment="Center" ToolTip="Notificaciones" Style="{StaticResource IconButtonStyle}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-
-                            <Border x:Name="Bd"
-                        Background="Transparent"
-                        CornerRadius="12">
-                                <Grid>
-                                    <!-- Icono campana -->
-                                    <Path MinWidth="18" MinHeight="18"
-                                Fill="{StaticResource BackgroundBrush}"
-                                Stretch="Uniform"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Data="{StaticResource IcoBell}"/>
-                                    <!-- Badge rojo -->
-                                    <Ellipse Width="9" MinHeight="9"
-                                     Fill="#F04438"
-                                     HorizontalAlignment="Left"
-                                     VerticalAlignment="Top"
-                                     Margin="10,8,0,0"/>
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
+                <Button Grid.Column="0" Width="40" Height="40" Padding="6" VerticalAlignment="Center" 
+                        ToolTip="Notificaciones" Style="{StaticResource IconButtonStyle}">
+                    <Grid>
+                        <Path MinWidth="18" MinHeight="18"
+                            Fill="{StaticResource BackgroundBrush}"
+                            Stretch="Uniform"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Data="{StaticResource IcoBell}"/>
+                        <Ellipse Width="9" MinHeight="9"
+                                Fill="#F04438"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Margin="10,8,0,0"/>
+                    </Grid>
                 </Button>
                 <Button Grid.Column="1" MinWidth="36" Width="40" Height="40"
-            VerticalAlignment="Center" ToolTip="Configuración" Style="{StaticResource IconButtonStyle}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="Bd"
-                         Background="Transparent"
-                         CornerRadius="12">
-                                <Grid>
-                                    <Path 
-                                 Fill="{StaticResource BackgroundBrush}"
-                                MinWidth="18" 
-                                MinHeight="18"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Stretch="Uniform"
-                                Data="{StaticResource IcoSettings}"/>
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
+                    VerticalAlignment="Center" ToolTip="Configuración" Style="{StaticResource IconButtonStyle}">
+                    <Path 
+                        Fill="{StaticResource BackgroundBrush}"
+                        MinWidth="18" 
+                        MinHeight="18"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Stretch="Uniform"
+                        Data="{StaticResource IcoSettings}"/>
                 </Button>
 
                 <Border Grid.Column="2" BorderThickness="1"  Width="1" Height="26"  BorderBrush="{StaticResource BackgroundBrush}" Margin="14,0" Opacity="0.6"/>
@@ -133,7 +108,7 @@
 
 
                 <Button Grid.Column="4" Width="40" Height="40"
-                         Padding="6" VerticalAlignment="Center" ToolTip="IconoUser" Style="{StaticResource IconButtonStyle}">
+                         Padding="6" VerticalAlignment="Center" ToolTip="IconoUser">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="Bd"
