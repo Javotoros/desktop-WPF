@@ -12,8 +12,11 @@ namespace DesktopApp.Models
         [JsonPropertyName("_id")]
         public string Id { get; set; }
 
-        public User User { get; set; }           
+        [JsonPropertyName("userId")]
+        public string User { get; set; }           
         public List<Rooms> Rooms { get; set; } = new List<Rooms>();
+
+        [JsonPropertyName("roomIds")]
         public List<string> RoomIds { get; set; } = new List<string>();
 
         public DateTime CheckIn { get; set; }

@@ -73,19 +73,21 @@ namespace DesktopApp.Views.Reservation
                     .Select(r => r.Id) // <- Esto usa el Id real de la habitación
                     .ToList();
 
-                // Mostrar en debug los Ids seleccionados
-                MessageBox.Show("Habitaciones seleccionadas (IDs): " + string.Join(", ", habitacionesSeleccionadas));
-
                 if (habitacionesSeleccionadas.Count == 0)
                 {
                     MessageBox.Show("Error: ninguna habitación válida seleccionada.");
                     return;
                 }
 
+                foreach (var id in habitacionesSeleccionadas)
+                {
+                    Console.WriteLine("ID seleccionada: " + id);
+                }
+
                 // Crear objeto reserva
                 var nuevaReserva = new Reservations
                 {
-                    User = new User { Id = "63f1b2c8a1b2c3d4e5f67890" }, // usuario fijo para pruebas
+                    User = "63f1b2c8a1b2c3d4e5f67890", // usuario fijo para pruebas
                     RoomIds = habitacionesSeleccionadas,
                     CheckIn = dpCheckIn.SelectedDate.Value,
                     CheckOut = dpCheckOut.SelectedDate.Value,
