@@ -4,10 +4,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="600" d:DesignWidth="600">
 
     <Border Background="White" Padding="20" CornerRadius="10" Margin="10" BorderBrush="#DDD" BorderThickness="1">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="350">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="500">
 
             <TextBlock Text="Crear Nueva Reserva" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" TextAlignment="Center"/>
 
@@ -20,8 +20,8 @@
             <TextBlock x:Name="lblClienteInfo" FontSize="12" Foreground="Gray" />
 
             <!-- Habitación -->
-            <TextBlock Text="Habitación" FontWeight="SemiBold" Margin="0,5,0,2"/>
-            <ComboBox x:Name="cbHabitaciones" Height="30" />
+            <TextBlock Text="Habitaciones" FontWeight="SemiBold" Margin="0,5,0,2"/>
+            <ListBox x:Name="lbHabitaciones" Height="100" SelectionMode="Extended" DisplayMemberPath="numRoom" Background="#FFF0F0F0" Foreground="Black"/>
 
             <!-- Fecha de Entrada -->
             <TextBlock Text="Fecha de Entrada" FontWeight="SemiBold" Margin="0,10,0,2"/>
@@ -39,9 +39,9 @@
                 <ComboBoxItem Content="checkin"/>
                 <ComboBoxItem Content="checkout"/>
             </ComboBox>
+            <Button Content="Crear Reserva" Height="35" Margin="0,20,0,0" Click="BtnCrearReserva_Click"/>
 
             <!-- Botón Crear -->
-            <Button Content="Crear Reserva" Height="35" Margin="0,20,0,0" Background="#2D2F36" Foreground="White" Click="BtnCrearReserva_Click"/>
         </StackPanel>
     </Border>
 </UserControl>

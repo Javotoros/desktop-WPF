@@ -8,5 +8,6 @@ namespace DesktopApp.ViewModels
 {
     class ReservationViewModel
     {
+
     }
 }

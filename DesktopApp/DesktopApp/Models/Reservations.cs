@@ -21,6 +21,15 @@ namespace DesktopApp.Models
 
         public string Status { get; set; }
 
-        
+        public string RoomNumbers
+        {
+            get
+            {
+                return Rooms != null && Rooms.Any()
+                    ? string.Join(", ", Rooms.Select(r => r.numRoom))
+                    : "";
+            }
+        }
+
     }
 }

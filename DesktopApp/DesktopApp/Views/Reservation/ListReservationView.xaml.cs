@@ -1,10 +1,8 @@
 ﻿using DesktopApp.Models;
 using DesktopApp.Services;
-using DesktopApp.Views.Reservation;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using DesktopApp.Models;
 
 namespace DesktopApp.Views.Reservation
 {
@@ -22,23 +20,10 @@ namespace DesktopApp.Views.Reservation
             dgReservation.ItemsSource = Reservas;
 
             CargarReservas();
+            _ = LoadReservationsAsync();
+
         }
 
-        /* private async void CargarReservas()
-         {
-             var lista = await _apiClient.GetReservasAsync();
-             try
-             {
-
-                 Reservas.Clear();
-                 foreach (var r in lista)
-                     Reservas.Add(r);
-             }
-             catch (Exception ex)
-             {
-                 MessageBox.Show("Error al cargar reservas: " + ex.Message);
-             }
-         }*/
         private async void CargarReservas()
         {
             try
@@ -102,6 +87,21 @@ namespace DesktopApp.Views.Reservation
             }
         }
 
+
+        public async Task LoadReservationsAsync()
+        {
+            var reservations = await _apiClient.GetReservasAsync();
+
+            foreach (var reservation in reservations)
+            {
+                var rooms = await Task.WhenAll(reservation.RoomIds.Select(id => _apiClient.GetRoomsId(id)));
+                reservation.Rooms = rooms.Where(r => r != null).ToList();
+            }
+
+            Reservas.Clear();
+            foreach (var r in reservations)
+                Reservas.Add(r);
+        }
     }
 }
 

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DesktopApp.Services
 {
@@ -45,10 +46,15 @@ namespace DesktopApp.Services
         {
             try
             {
-                var response = await _httpClient.DeleteAsync($"delete/{reservationId}");
+                var response = await _httpClient.DeleteAsync($"reservations/delete/{reservationId}");
 
+                // Depuración:
                 if (!response.IsSuccessStatusCode)
+                {
+                    var contenido = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Error API: {response.StatusCode}\n{contenido}");
                     return false;
+                }
 
                 return true;
             }
@@ -69,6 +75,7 @@ namespace DesktopApp.Services
             {
                 PropertyNameCaseInsensitive = true
             });
+
             return rooms ?? new List<Rooms>();
         }
 
@@ -114,5 +121,21 @@ namespace DesktopApp.Services
 
 
         }
+
+        public async Task<string> PostReservationAsync(Reservations reserva)
+        {
+            var json = JsonSerializer.Serialize(reserva);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("reservations/add", content);
+
+            var respuestaJson = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+                return null; 
+            else
+                return respuestaJson;
+        }
+
     }
 }
