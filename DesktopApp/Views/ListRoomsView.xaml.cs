@@ -1,4 +1,6 @@
-﻿using DesktopApp.ViewModels;
+﻿using DesktopApp.Models;
+using DesktopApp.ViewModels;
+using DesktopApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using DesktopApp.Views;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -24,16 +25,32 @@ namespace DesktopApp.Views
     /// </summary>
     public partial class ListRoomsView : UserControl
     {
+        private readonly ListRoomsViewModel _vm = new ListRoomsViewModel();
         public ListRoomsView()
         {
             InitializeComponent();
-            DataContext = new RoomsViewModel();
+            DataContext = _vm;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
-            FormRoomsView form = new FormRoomsView();
-            form.Show();
+            var form = new FormRoomsView(); 
+            form.Owner = Application.Current.MainWindow;
+            var ok = form.ShowDialog();
+            await _vm.LoadRoomsAsync();
+        }
+        private async void Update_Click(object sender, RoutedEventArgs e)
+        {
+            if (_vm.SelectedRoom == null)
+            {
+                MessageBox.Show("Selecciona una habitación para editar.");
+                return;
+            }
+
+            var form = new FormRoomsView(_vm.SelectedRoom);
+            form.Owner = Application.Current.MainWindow;
+            var ok = form.ShowDialog();
+            await _vm.LoadRoomsAsync();
         }
     }
 }

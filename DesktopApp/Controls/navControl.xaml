@@ -56,90 +56,160 @@
                 <ListBox x:Name="MainMenu"
                          Background="Transparent"
                         Grid.Row="1"
-                        BorderThickness="0"
-                        ItemContainerStyle="{StaticResource SidebarItemStyle}"
-                        SelectionChanged="MainMenu_SelectionChanged">
+                        BorderThickness="0" 
+                        HorizontalContentAlignment="Center"
+                        SelectedValuePath="Tag"
+                        SelectedValue="{Binding SelectedMenu, Mode=TwoWay}">
+                    <ListBox.Resources>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBoxItem Margin="10 10" Tag="dashboard">
+                        <Button Command="{Binding NavigateCommand}"
+                                CommandParameter="dashboard"
+                                Style="{StaticResource SidebarItemStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Fill="{StaticResource PrimaryBrush}"
+                                      Width="18" Height="18" Stretch="Uniform"
+                                      Data="{StaticResource IcoDashboard}"/>
+                                <TextBlock Text="Dashboard"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource SidebarTextStyle}"/>
+                            </StackPanel>
+                        </Button>
+                    </ListBoxItem>
 
-                    <ListBoxItem Tag="dashboard" Margin="10 10">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Fill="{StaticResource PrimaryBrush}"
+                    <ListBoxItem  Margin="10 10" Tag="users">
+                        <Button Command="{Binding NavigateCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                HorizontalContentAlignment="Stretch"
+                                CommandParameter="users"
+                                Style="{StaticResource SidebarItemStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Fill="{StaticResource PrimaryBrush}"
                                     Width="18" Height="18" Stretch="Uniform"
-                                    Data="{StaticResource IcoDashboard}"/>
-                            <TextBlock Text="Dashboard"
-                                Margin="12,0,0,0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource SidebarTextStyle}"/>
-                        </StackPanel>
+                                    Data="{StaticResource IcoUsers}"/>
+                                <TextBlock Text="Usuarios"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource SidebarTextStyle}"/>
+                            </StackPanel>
+                        </Button>
                     </ListBoxItem>
 
-                    <ListBoxItem Tag="users" Margin="10 10">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Fill="{StaticResource PrimaryBrush}"
-                           Width="18" Height="18" Stretch="Uniform"
-                           Data="{StaticResource IcoUsers}"/>
-                            <TextBlock Text="Usuarios"
-                                Margin="12,0,0,0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource SidebarTextStyle}"/>
-                        </StackPanel>
+                    <ListBoxItem  Margin="10 10" Tag="bookings">
+                        <Button Command="{Binding NavigateCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                HorizontalContentAlignment="Stretch"
+                                CommandParameter="bookings"
+                                Style="{StaticResource SidebarItemStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Fill="{StaticResource PrimaryBrush}"
+                                    Width="18" Height="18" Stretch="Uniform"
+                                    Data="{StaticResource IcoReservations}"/>
+                                <TextBlock Text="Reservas"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource SidebarTextStyle}"/>
+                            </StackPanel>
+                        </Button>
                     </ListBoxItem>
 
-                    <ListBoxItem Tag="reservas" Margin="10 10">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Fill="{StaticResource PrimaryBrush}"
-                           Width="18" Height="18" Stretch="Uniform"
-                           Data="{StaticResource IcoReservations}"/>
-                            <TextBlock Text="Reservas"
-                                Margin="12,0,0,0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource SidebarTextStyle}"/>
-                        </StackPanel>
-                    </ListBoxItem>
-
-                    <ListBoxItem Tag="rooms" Margin=" 10 10">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Fill="{StaticResource PrimaryBrush}"
-                           Width="18" Height="18" Stretch="Uniform"
-                           Data="{StaticResource IcoRooms}"/>
-                            <TextBlock Text="Habitaciones"
-                                Margin="12,0,0,0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource SidebarTextStyle}"/>
-                        </StackPanel>
+                    <ListBoxItem  Margin=" 10 10" Tag="rooms">
+                        <Button Command="{Binding NavigateCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                HorizontalContentAlignment="Stretch"
+                                CommandParameter="rooms"
+                                Style="{StaticResource SidebarItemStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Fill="{StaticResource PrimaryBrush}"
+                                        Width="18" Height="18" Stretch="Uniform"
+                                        Data="{StaticResource IcoRooms}"
+                                />
+                                <TextBlock Text="Habitaciones"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource SidebarTextStyle}"/>
+                            </StackPanel>
+                        </Button>
                     </ListBoxItem>
 
                 </ListBox>
 
                 <!-- MENÚ INFERIOR -->
-                <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <StackPanel Grid.Row="2" Margin="0,10,0,0" >
                     <Separator Opacity="0.25"/>
 
-                    <ListBox x:Name="SubMenu" Background="Transparent" BorderThickness="0"
-                      ItemContainerStyle="{StaticResource SidebarItemStyle}"
-                             SelectionChanged="MainMenu2_SelectionChanged">
-
-                        <ListBoxItem>
-                            <StackPanel Orientation="Horizontal">
-                                <Path Fill="{StaticResource PrimaryBrush}"
-                               Width="18" Height="18" Stretch="Uniform"
-                               Data="{StaticResource IcoHelp}"/>
-                                <TextBlock Text="Ayuda"
-                                    Margin="12,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource SidebarTextStyle}"/>
-                            </StackPanel>
+                    <ListBox x:Name="SubMenu" Background="Transparent" BorderThickness="0" 
+                            HorizontalContentAlignment="Center"
+                            SelectedValuePath="Tag"
+                            SelectedValue="{Binding SelectedMenu, Mode=TwoWay}">
+                        <ListBox.Resources>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBoxItem Tag="help">
+                            <Button Command="{Binding NavigateCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                HorizontalContentAlignment="Stretch"
+                                CommandParameter="help"
+                                Style="{StaticResource SidebarItemStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Fill="{StaticResource PrimaryBrush}"
+                                        Width="18" Height="18" Stretch="Uniform"
+                                        Data="{StaticResource IcoHelp}"/>
+                                    <TextBlock Text="Ayuda"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource SidebarTextStyle}"/>
+                                </StackPanel>
+                            </Button>
                         </ListBoxItem>
 
-                        <ListBoxItem>
-                            <StackPanel Orientation="Horizontal">
-                                <Path Fill="{StaticResource PrimaryBrush}"
-                               Width="18" Height="18" Stretch="Uniform"
-                               Data="{StaticResource IcoPower}"/>
-                                <TextBlock Text="Salir"
-                                    Margin="12,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource SidebarTextStyle}"/>
-                            </StackPanel>
+                        <ListBoxItem Tag="power">
+                            <Button Command="{Binding NavigateCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                HorizontalContentAlignment="Stretch"
+                                CommandParameter="power"
+                                Style="{StaticResource SidebarItemStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Fill="{StaticResource PrimaryBrush}"
+                                        Width="18" Height="18" Stretch="Uniform"
+                                        Data="{StaticResource IcoPower}"/>
+                                    <TextBlock Text="Salir"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource SidebarTextStyle}"/>
+                                </StackPanel>
+                            </Button>
                         </ListBoxItem>
 
                     </ListBox>

@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows;
+using static DesktopApp.Models.Rooms;
 
 namespace DesktopApp.Services
 {
@@ -57,7 +59,7 @@ namespace DesktopApp.Services
         }
         public async Task<int> GetNextRoom(int numFloor)
         {
-            var response = await _httpClient.GetAsync($"/rooms/nextRoom/{numFloor}");
+            var response = await _httpClient.GetAsync($"rooms/nextRoom/{numFloor}");
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -68,33 +70,60 @@ namespace DesktopApp.Services
             int newRoom = JsonSerializer.Deserialize<int> (json);
             return newRoom;
         }
-        public async Task<bool> PostRooms(int numFloor, string roomType, string description,
+        public async Task<string> PostRooms(int numFloor, string roomType, string description,
                     string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
         {
-            try
-            {
-                var values = new Dictionary<string, string>()
+            var values = new Dictionary<string, string>()
                 {
                     { "numFloor", numFloor.ToString()},
-                    { "roomType",roomType},
+                    { "roomType",roomType.ToLower()},
                     { "description",description},
                     { "image",image},
                     { "pricePerNight",pricePerNight.ToString()},
                     { "reviews",reviews},
                     { "maxOccupancy",maxOccupancy.ToString()},
-                    { "availability",availability}
+                    { "availability",availability.ToLower()}
                  };
-                var content = new FormUrlEncodedContent(values);
-                var response = await _httpClient.PostAsync("add", content);
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception e)
+            var content = new FormUrlEncodedContent(values);
+            var response = await _httpClient.PostAsync("rooms/add", content);
+            var body = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"{(int)response.StatusCode} {response.ReasonPhrase}\n{body}");
+
+            return body;
+        }
+
+        public async Task updateIdRoom(string id, string roomType, string description,
+                    string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
+        {
+            var values = new Dictionary<string, string>()
+                {
+                    { "roomType",roomType.ToLower()},
+                    { "description",description},
+                    { "image",image},
+                    { "pricePerNight",pricePerNight.ToString()},
+                    { "reviews",reviews},
+                    { "maxOccupancy",maxOccupancy.ToString()},
+                    { "availability",availability.ToLower()}
+                 };
+            var content = new FormUrlEncodedContent(values);
+            var response = await _httpClient.PatchAsync($"rooms/modify/{id}", content);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if(!response.IsSuccessStatusCode)
+                throw new Exception($"{(int)response.StatusCode} {response.ReasonPhrase}");
+           
+        }
+        public async Task DeleteIdRoom(string id)
+        {
+            var response = await _httpClient.DeleteAsync($"rooms/delete/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine(e);
-                return false;
+                throw new Exception(json);
             }
-
-
         }
     }
 }

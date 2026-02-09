@@ -22,12 +22,7 @@ namespace DesktopApp
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        
-        public void Navigate(UserControl view)
-        {
-            MainContent.Content = view;
+            DataContext = new MainViewModel();
         }
     }
 }

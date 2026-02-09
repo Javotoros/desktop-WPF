@@ -24,11 +24,7 @@
 
         <controls:navControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"/>
 
-
-
-        <ContentControl x:Name="MainContent" Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="12" />
+        <ContentControl Content="{Binding CurrentView}"  Grid.Row="1" Grid.Column="1"  />
 
     </Grid>
 </Window>

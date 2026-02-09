@@ -38,20 +38,17 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-
     <!-- Estilo iconos dentro del sidebar  -->
-    <Style x:Key="SidebarItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Padding" Value="20"/>
+    <Style x:Key="SidebarItemStyle" TargetType="Button">
         <Setter Property="Margin" Value="0,4,0,0"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ListBoxItem">
+                <ControlTemplate TargetType="Button">
                     <Border x:Name="Bd"
-                                Background="{TemplateBinding Background}"
+                                Background="Transparent"
                              CornerRadius="12">
                         <ContentPresenter VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
@@ -60,9 +57,10 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
+                        Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentBrush}"/>
-                        </Trigger>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

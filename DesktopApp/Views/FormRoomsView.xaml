@@ -31,7 +31,8 @@
             <Button Grid.Column="2"
                     Style="{StaticResource SecondaryButton }"
                     Command="{Binding SaveCommand}"
-                    Margin="10">
+                    Margin="10" Cursor="Hand"                    
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
                 <Button.Template >
                     <ControlTemplate TargetType="Button" >
                         <Border CornerRadius="25" Background="{StaticResource OkBrush}" Padding="10">
@@ -42,7 +43,7 @@
             </Button>
             <Button Grid.Column="3"
                     Style="{StaticResource SecondaryButton }"
-                    Command="{Binding SaveCommand}"
+                    Command="{Binding LimpiarCommand }"
                     Margin="10">
                 <Button.Template >
                     <ControlTemplate TargetType="Button" >
@@ -54,8 +55,9 @@
             </Button>
             <Button Grid.Column="4  "
                     Style="{StaticResource SecondaryButton }"
-                    Command="{Binding SaveCommand}"
-                    Margin="10">
+                    Margin="10"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
                 <Button.Template >
                     <ControlTemplate TargetType="Button" >
                         <Border CornerRadius="25" Background="{StaticResource CancelBrush}" Padding="10">
@@ -93,26 +95,37 @@
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Número de Habitación " Style="{StaticResource Label}"/>
                                     <TextBlock MinHeight="40"
-                                               Padding="10"
-                                               VerticalAlignment="Center"
-                                               Background="#FFF3F4F6"
-                                             Text="{Binding NextRoom}"/>
+                                        Padding="10"
+                                        VerticalAlignment="Center"
+                                        Background="#FFF3F4F6">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="{Binding NextRoom}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="false">
+                                                        <Setter Property="Text" Value="{Binding CurrentRoom}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
                                     <TextBlock Text="Piso" Style="{StaticResource Label}"/>
                                     <TextBox x:Name="numFloorText" Style="{StaticResource InputTextBox}"
-                                             Text="{Binding NewFloor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                                             Text="{Binding NewFloor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             IsEnabled="{Binding IsEditing }"/>
                                 </StackPanel>
                             </Grid>
 
                             <TextBlock Text="Tipo de Habitación" Style="{StaticResource Label}"/>
                             <ComboBox MinHeight="40"
-                                      BorderThickness="1"
-                                      Padding="10,6"
-                                      ItemsSource="{Binding RoomTypes}"
-                                      SelectedItem="{Binding SelectedRoomType}"
-                                      />
+                                BorderThickness="1"
+                                Padding="10,6"
+                                ItemsSource="{Binding RoomTypes}"
+                                SelectedItem="{Binding RoomType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedIndex="-1"/>
 
                             <TextBlock Text="Descripción" Style="{StaticResource Label}" Margin="0,14,0,0"/>
                             <TextBox Style="{StaticResource InputTextBox}"
@@ -144,7 +157,7 @@
                             <ComboBox MinHeight="40"
                                       BorderThickness="1"
                                       Padding="10,6"
-                                      SelectedItem="{Binding SelectedAvailability}"
+                                       SelectedItem="{Binding Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       ItemsSource="{Binding AvailabilityOptions}"/>
 
                         </StackPanel>
