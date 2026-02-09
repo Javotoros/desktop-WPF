@@ -7,16 +7,35 @@
              d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
         <StackPanel Orientation="Vertical" Margin="10">
-            <!-- Botón para crear nueva reserva -->
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Button Content="Nueva Reserva" Width="150" Height="35" Margin="0,0,0,10" Click="BtnNuevaReserva_Click"/>
-                <Button Content="Cancelar Reserva" Width="150" Height="35" Margin="10,0,0,10" Click="BtnCancelarReserva_Click"/>
-                
-            </StackPanel>
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Izquierda (vacío o título) -->
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Nueva Reserva" Width="140" Height="35" Margin="0,0,0,10" Command="{Binding NuevaReservaCommand}"/>
+                    <Button Content="Cancelar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding CancelarReservaCommand}"/>
+                </StackPanel>
+
+                <!-- Derecha (filtro) -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <CheckBox Content="Ocultar canceladas" Margin="20,0,0,10" IsChecked="{Binding OcultarCanceladas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBox x:Name="txtBuscar" Width="200" Height="35" Margin="10,0,0,10" Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Content="Buscar" Command="{Binding BuscarCommand}" Height="35" Margin="10,0,0,10" Width="50"/>
+                    <Button Content="Limpiar" Command="{Binding LimpiarCommand}" Height="35" Margin="20,0,0,10"/>
+                </StackPanel>
+            </Grid>
+
             <DataGrid x:Name="dgReservation"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
-                  Margin="10">
+                  Margin="10" 
+                  ItemsSource="{Binding Reservas}"
+                  SelectedItem="{Binding ReservaSeleccionada, Mode=TwoWay}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*" />
