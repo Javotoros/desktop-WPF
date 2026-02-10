@@ -51,7 +51,6 @@ namespace DesktopApp.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-
             var rooms = JsonSerializer.Deserialize<List<Rooms>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -178,6 +177,23 @@ namespace DesktopApp.Services
             var response = await _httpClient.PostAsync($"rooms/add/{id}/images",form);
             response.EnsureSuccessStatusCode();
             
+        }
+
+        public async Task<List<Reviews>> GetReviewIdRoom(string id)
+        {
+            var response = await _httpClient.GetAsync($"reviews/room/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(json);
+            }
+            var reviews = JsonSerializer.Deserialize<List<Reviews>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return reviews;
         }
     }
 }

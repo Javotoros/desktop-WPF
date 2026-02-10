@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,11 +21,24 @@ namespace DesktopApp.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<Rooms> Rooms { get; set; } = new();
+        public ObservableCollection<Reviews> Reviews { get; set; } = new();
+
         private Rooms? _selectedRoom;
         public Rooms? SelectedRoom
         {
             get => _selectedRoom;
             set { _selectedRoom = value; OnPropertyChanged(); }
+        }
+
+        private int? _reviewCount;
+        public int? ReviewCount
+        {
+            get => _reviewCount;
+            set
+            {
+                _reviewCount = value;
+                OnPropertyChanged();
+            }
         }
         public ICommand DeleteRoomCommand { get; }
         public ListRoomsViewModel()
@@ -39,8 +53,18 @@ namespace DesktopApp.ViewModels
                 var list = await _api.GetRooms();
 
                 Rooms.Clear();
+
                 foreach (var r in list)
+                {
                     Rooms.Add(r);
+                }
+
+                foreach (var room in Rooms)
+                {
+                    var reviews = await _api.GetReviewIdRoom(room.Id);
+                    room.ReviewCount = reviews?.Count ?? 0;
+                }
+                OnPropertyChanged(nameof(Rooms));
             }
             catch (Exception e)
             {

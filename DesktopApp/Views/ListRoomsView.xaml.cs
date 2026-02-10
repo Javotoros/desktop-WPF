@@ -41,11 +41,14 @@ namespace DesktopApp.Views
         }
         private async void Update_Click(object sender, RoutedEventArgs e)
         {
-            if (_vm.SelectedRoom == null)
+            if ((sender as Button)?.CommandParameter is not Rooms room)
             {
                 MessageBox.Show("Selecciona una habitación para editar.");
                 return;
             }
+
+            // Sincronizamos selección
+            _vm.SelectedRoom = room;
 
             var form = new FormRoomsView(_vm.SelectedRoom);
             form.Owner = Application.Current.MainWindow;
