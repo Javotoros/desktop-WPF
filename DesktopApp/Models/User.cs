@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DesktopApp.Models
 {
-    internal class User
+    public class User
     {
+        public string Id { get; set; }   // ObjectId de Mongo
+        public string Name { get; set; } // Nombre completo
     }
+
 }
