@@ -30,7 +30,7 @@ namespace DesktopApp.ViewModels
         public ListRoomsViewModel()
         {
             _ = LoadRoomsAsync();
-            DeleteRoomCommand = new RelayCommand(async _=>await UpdateDataRooms(), _ => SelectedRoom != null);
+            DeleteRoomCommand = new RelayCommand(async _=>await DeleteDataRooms(), _ => SelectedRoom != null);
         }
         public async Task LoadRoomsAsync()
         {
@@ -47,7 +47,7 @@ namespace DesktopApp.ViewModels
                 MessageBox.Show(e.Message);
             }
         }
-        private async Task UpdateDataRooms()
+        private async Task DeleteDataRooms()
         {
             try
             {

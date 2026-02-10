@@ -1,8 +1,10 @@
 ﻿using DesktopApp.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -70,17 +72,14 @@ namespace DesktopApp.Services
             int newRoom = JsonSerializer.Deserialize<int> (json);
             return newRoom;
         }
-        public async Task<string> PostRooms(int numFloor, string roomType, string description,
-                    string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
+        public async Task<string> PostRooms(int numFloor, string roomType, string description, int pricePerNight, int maxOccupancy, string availability)
         {
             var values = new Dictionary<string, string>()
                 {
                     { "numFloor", numFloor.ToString()},
                     { "roomType",roomType.ToLower()},
                     { "description",description},
-                    { "image",image},
                     { "pricePerNight",pricePerNight.ToString()},
-                    { "reviews",reviews},
                     { "maxOccupancy",maxOccupancy.ToString()},
                     { "availability",availability.ToLower()}
                  };
@@ -93,16 +92,13 @@ namespace DesktopApp.Services
             return body;
         }
 
-        public async Task updateIdRoom(string id, string roomType, string description,
-                    string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
+        public async Task updateIdRoom(string id, string roomType, string description, int pricePerNight, int maxOccupancy, string availability)
         {
             var values = new Dictionary<string, string>()
                 {
                     { "roomType",roomType.ToLower()},
                     { "description",description},
-                    { "image",image},
                     { "pricePerNight",pricePerNight.ToString()},
-                    { "reviews",reviews},
                     { "maxOccupancy",maxOccupancy.ToString()},
                     { "availability",availability.ToLower()}
                  };
@@ -124,6 +120,64 @@ namespace DesktopApp.Services
             {
                 throw new Exception(json);
             }
+        }
+        public async Task DeleteIdImgRoom(string id, string imagePath)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"rooms/delete/{id}/images")
+            {
+                Content = new StringContent(
+                    JsonSerializer.Serialize(new { image = imagePath }),
+                    Encoding.UTF8,
+                    "application/json"
+                )
+}
+            ;
+            var response = await _httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task PostIdImgRoom(string id, List<string> filePaths)
+        {
+            using var form = new MultipartFormDataContent();
+
+            foreach (var p in filePaths)
+            {
+                var bytes = await File.ReadAllBytesAsync(p);
+                var content = new ByteArrayContent(bytes);
+
+                var ext = Path.GetExtension(p).ToLowerInvariant();
+
+                string type;
+
+                switch (ext)
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                        type = "image/jpeg";
+                        break;
+
+                    case ".png":
+                        type = "image/png";
+                        break;
+
+                    case ".webp":
+                        type = "image/webp";
+                        break;
+
+                    default:
+                        type = "application/octet-stream";
+                        break;
+                }
+
+                content.Headers.ContentType =new System.Net.Http.Headers.MediaTypeHeaderValue(type);
+
+                form.Add(content, "images", Path.GetFileName(p)); 
+            }
+
+            var response = await _httpClient.PostAsync($"rooms/add/{id}/images",form);
+            response.EnsureSuccessStatusCode();
+            
         }
     }
 }

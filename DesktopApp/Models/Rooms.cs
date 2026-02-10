@@ -21,8 +21,6 @@ namespace DesktopApp.Models
 
         public float pricePerNight { get; set; }
         public int maxOccupancy{ get; set; }
-
-        public List<string> reviews { get; set; }
         public  enum Availability {  Available, Unavailable,Block }
         public Availability availability { get; set; }
     }

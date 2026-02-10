@@ -32,13 +32,12 @@
                 </StackPanel>
                 <DataGrid Grid.Row="1" Style="{StaticResource RoomsDataGridStyle}" ItemsSource="{Binding Rooms}" SelectedItem="{Binding SelectedRoom}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nº" Binding="{Binding numRoom}" Width="70"/>
+                        <DataGridTextColumn Header="NºHab" Binding="{Binding numRoom}" Width="70"/>
                         <DataGridTextColumn Header="Planta" Binding="{Binding numFloor}" Width="80"/>
                         <DataGridTextColumn Header="Tipo" Binding="{Binding roomType}" Width="140"/>
                         <DataGridTextColumn Header="Precio/noche" Binding="{Binding pricePerNight, StringFormat={}{0:0.00} €}" Width="120"/>
                         <DataGridTextColumn Header="Ocupación máx." Binding="{Binding maxOccupancy}" Width="120"/>
                         <DataGridTextColumn Header="Disponible" Binding="{Binding availability}" Width="100"/>
-                        <DataGridTextColumn Header="Reviews" Binding="{Binding reviews}" Width="90"/>
                         <DataGridTextColumn Header="Descripción" Binding="{Binding description}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>

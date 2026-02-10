@@ -79,6 +79,10 @@
                         <ColumnDefinition Width="16"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
                     <!-- Información Básica -->
                     <Border Grid.Column="0" Style="{StaticResource CardBorder}">
@@ -162,18 +166,9 @@
 
                         </StackPanel>
                     </Border>
-                </Grid>
-
-                <!-- Row 2: Imágenes + Reseñas -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="16"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Imágenes -->
-                    <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                    
+                    <!--Imagenes-->
+                    <Border Grid.ColumnSpan="3" Grid.Row="1" Style="{StaticResource CardBorder}">
                         <StackPanel>
                             <TextBlock Text="Imágenes de la Habitación" FontSize="18" FontWeight="Bold" Margin="0,0,0,14"/>
 
@@ -182,90 +177,51 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="12"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox Grid.Column="0"
-                                         Style="{StaticResource InputTextBox}"
-                                         Text="{Binding ImageUrlDraft, UpdateSourceTrigger=PropertyChanged}"
-                                         ToolTip="Pega una URL válida (https://...)"
-                                         />
+                                        IsEnabled="False"
+                                        Style="{StaticResource InputTextBox}"
+                                        Text="{Binding ImageUrlDraft, UpdateSourceTrigger=PropertyChanged}"
+                                        ToolTip="URL válida "
+                                    />
                                 <Button Grid.Column="2"
-                                        Style="{StaticResource PrimaryButton}"
-                                        Content="＋ Agregar"
-                                        Command="{Binding AddImageCommand}"/>
+                                    Style="{StaticResource PrimaryButton}"
+                                    Content="Elegir archivos"
+                                    Command="{Binding PickImagesCommand}"/>
                             </Grid>
 
                             <ItemsControl ItemsSource="{Binding Images}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,0,10">
-                                            <DockPanel>
-                                                <TextBlock Text="{Binding}" Foreground="#FF374151" TextTrimming="CharacterEllipsis" />
-                                                <Button DockPanel.Dock="Right"
+                                        <Border Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="20" Margin="0,0,0,10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                    Text="{Binding}"
+                                                    Foreground="Red"
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <Button Grid.Column="1"
                                                         Style="{StaticResource SecondaryButton}"
-                                                        Padding="10,6"
+                                                        Background="{StaticResource CancelBrush}"
+                                                        Height="40"
+                                                        VerticalAlignment="Center"
                                                         Content="Eliminar"
                                                         Command="{Binding DataContext.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                         CommandParameter="{Binding}"/>
-                                            </DockPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                            <TextBlock Text="Tip: aquí puedes mostrar miniaturas si luego descargas la imagen."
-                                       Style="{StaticResource MutedText}" Margin="0,6,0,0"/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Reseñas -->
-                    <Border Grid.Column="2" Style="{StaticResource CardBorder}">
-                        <StackPanel>
-                            <TextBlock Text="Reseñas" FontSize="18" FontWeight="Bold" Margin="0,0,0,14"/>
-
-                            <Grid Margin="0,0,0,14">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="12"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBox Grid.Column="0"
-                                         Style="{StaticResource InputTextBox}"
-                                         Text="{Binding ReviewDraft, UpdateSourceTrigger=PropertyChanged}"
-                                         AcceptsReturn="True"
-                                         TextWrapping="Wrap"
-                                         MinHeight="70"
-                                         VerticalContentAlignment="Top"
-                                         />
-                                <Button Grid.Column="2"
-                                        Style="{StaticResource SecondaryButton}"
-                                        Content="＋ Agregar"
-                                        Command="{Binding AddReviewCommand}"/>
-                            </Grid>
-
-                            <ItemsControl ItemsSource="{Binding Reviews}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,0,10">
-                                            <DockPanel>
-                                                <TextBlock Text="{Binding}" Foreground="#FF374151" TextWrapping="Wrap" Width="360"/>
-                                                <Button DockPanel.Dock="Right"
-                                                        Style="{StaticResource SecondaryButton}"
-                                                        Padding="10,6"
-                                                        Content="Eliminar"
-                                                        Command="{Binding DataContext.RemoveReviewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                        CommandParameter="{Binding}"/>
-                                            </DockPanel>
+                                            </Grid>
                                         </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
                     </Border>
-
                 </Grid>
-
             </StackPanel>
         </ScrollViewer>
     </Grid>
