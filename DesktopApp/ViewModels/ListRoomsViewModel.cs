@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {
-    public class ListRoomsViewModel: INotifyPropertyChanged
+    public class ListRoomsViewModel : INotifyPropertyChanged
     {
         private readonly ApiClient _api = new ApiClient();
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -43,8 +43,8 @@ namespace DesktopApp.ViewModels
         public ICommand DeleteRoomCommand { get; }
         public ListRoomsViewModel()
         {
-            _ = LoadRoomsAsync(); 
-            DeleteRoomCommand = new RelayCommand(async _=>await DeleteDataRooms(), _ => SelectedRoom != null);
+            _ = LoadRoomsAsync();
+            DeleteRoomCommand = new RelayCommand(async _ => await DeleteDataRooms(), _ => SelectedRoom != null);
         }
         public async Task LoadRoomsAsync()
         {
