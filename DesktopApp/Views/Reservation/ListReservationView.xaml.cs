@@ -9,7 +9,6 @@ namespace DesktopApp.Views.Reservation
     public partial class ListReservationView : UserControl
     {
         private readonly ApiClient _apiClient;
-        public ObservableCollection<Reservations> Reservas { get; set; }
 
         public ListReservationView()
         {
@@ -18,6 +17,9 @@ namespace DesktopApp.Views.Reservation
 
         }
 
-       
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

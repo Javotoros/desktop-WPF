@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DesktopApp.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DesktopApp.Views
 {
-    /// <summary>
-    /// Interaction logic for LoginView.xaml
-    /// </summary>
     public partial class LoginView : Window
     {
         public LoginView()
         {
             InitializeComponent();
+
+            var vm = new LoginViewModel();
+            vm.LoginSucceeded += (s, e) =>
+            {
+                this.DialogResult = true; // Marca login exitoso
+                this.Close();
+            };
+
+            this.DataContext = vm;
         }
     }
 }

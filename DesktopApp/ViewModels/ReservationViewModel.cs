@@ -215,11 +215,9 @@ namespace DesktopApp.ViewModels
 
         private void NuevaReserva()
         {
-            var mainWindow = Application.Current.MainWindow as MainWindow;
-            if (mainWindow?.DataContext is MainViewModel vm)
-            {
-                vm.CurrentView = new Views.Reservation.AddReservationView();
-            }
+            var ventana = new Views.Reservation.AddReservationView();
+            ventana.Owner = Application.Current.MainWindow;
+            ventana.ShowDialog(); 
         }
         private async Task CancelarReservaAsync()
         {
@@ -285,6 +283,12 @@ namespace DesktopApp.ViewModels
 
         public async Task CrearReservaAsync()
         {
+            if (UsuarioSeleccionado == null)
+            {
+                MessageBox.Show("Por favor, selecciona un cliente de la lista.");
+                return;
+            }
+
             if (!PuedeCrearReserva())
             {
                 MessageBox.Show("Completa todos los campos correctamente.");
@@ -297,7 +301,7 @@ namespace DesktopApp.ViewModels
 
                 var nuevaReserva = new Reservations
                 {
-                    User = "63f1b2c8a1b2c3d4e5f67890",
+                    User = UsuarioSeleccionado.Id,
                     RoomIds = roomIds,
                     CheckIn = CheckIn.Value.Date.AddHours(12),
                     CheckOut = CheckOut.Value.Date.AddHours(12),
@@ -344,6 +348,7 @@ namespace DesktopApp.ViewModels
             try
             {
                 var lista = await _apiClient.GetUsersByRolAsync("Usuario");
+                MessageBox.Show($"API devolvió: {lista.Count()} usuarios.");
 
                 Usuarios.Clear();
                 foreach (var u in lista)
@@ -361,7 +366,6 @@ namespace DesktopApp.ViewModels
         {
             if (Usuarios == null) return;
 
-            // Usar ToUpperInvariant() para que la búsqueda no sea case sensitive
             var filtro = string.IsNullOrWhiteSpace(DNIBusqueda)
                 ? Usuarios
                 : new ObservableCollection<User>(

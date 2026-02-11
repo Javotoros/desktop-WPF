@@ -1,19 +1,21 @@
 ﻿using DesktopApp.Models;
+using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Windows;
-using System.IO;
 using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace DesktopApp.Services
 {
     public class ApiClient
     {
+        private static ApiClient _instance;
         private readonly HttpClient _httpClient;
+        private static string _token;
 
-
-        // URL base de tu API
         private const string BASE_URL = "http://localhost:3000/";
 
         public ApiClient()
@@ -22,10 +24,31 @@ namespace DesktopApp.Services
             _httpClient.BaseAddress = new Uri(BASE_URL);
         }
 
+        public static ApiClient Instance => _instance ??= new ApiClient();
+
+        // ⚡ Solo guardamos el token en la variable
+        public void SetToken(string token)
+        {
+            _token = token;
+        }
+
+        // ⚡ Método helper para crear requests con Authorization
+        private HttpRequestMessage CreateRequest(HttpMethod method, string url)
+        {
+            var request = new HttpRequestMessage(method, url);
+            MessageBox.Show(_token);
+            if (!string.IsNullOrEmpty(_token))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            }
+            return request;
+        }
+
 
         public async Task<List<Reservations>> GetReservasAsync()
         {
-            var response = await _httpClient.GetAsync("reservations");
+           var request = CreateRequest(HttpMethod.Get, $"reservations");
+            var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
                 return new List<Reservations>();
@@ -44,7 +67,8 @@ namespace DesktopApp.Services
         {
             try
             {
-                var response = await _httpClient.DeleteAsync($"reservations/delete/{reservationId}");
+                var request = CreateRequest(HttpMethod.Delete, $"reservations/delete/{reservationId}");
+                var response = await _httpClient.SendAsync(request);
 
                 // Depuración:
                 if (!response.IsSuccessStatusCode)
@@ -246,26 +270,30 @@ namespace DesktopApp.Services
 
         public async Task<List<User>> GetUsersByRolAsync(string rol)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"users/rol/{rol}");
-                if (!response.IsSuccessStatusCode)
-                    return new List<User>();
+            var request = CreateRequest(HttpMethod.Get, $"/users/rol/{rol}");
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
 
-                var users = JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
 
-                return users ?? new List<User>();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al obtener usuarios: " + ex.Message);
-                return new List<User>();
-            }
+        public async Task<string> LoginAsync(string email, string password)
+        {
+            var payload = new { email, password };
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("auth/login", content);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            string token = doc.RootElement.GetProperty("token").GetString();
+
+            SetToken(token); // Guardamos solo la variable
+            MessageBox.Show(token);
+            return token;
         }
 
     }
