@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using DesktopApp.Commands;
 using System.Windows.Input;
 using DesktopApp.Views;
-using DesktopApp.Views.Reservas;
+using DesktopApp.Views.Reservation;
 using System.Windows;
 
 namespace DesktopApp.ViewModels

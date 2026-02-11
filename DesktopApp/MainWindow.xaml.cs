@@ -1,6 +1,6 @@
 ﻿using DesktopApp.ViewModels;
 using DesktopApp.Views;
-using DesktopApp.Views.Reservas;
+using DesktopApp.Views.Reservation;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;

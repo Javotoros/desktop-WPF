@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using DesktopApp.Commands;
 using DesktopApp.Models;
 using DesktopApp.Services;
 using System.Windows.Input;
 using System.Windows;
 using System.Text.Json;
 using System.Collections.ObjectModel;
-using Microsoft.Win32;
-using System.IO;
-using System.Text;
+using DesktopApp.Commands;
 
 namespace DesktopApp.ViewModels
 {
@@ -183,7 +175,7 @@ namespace DesktopApp.ViewModels
         {
 
             IsEditing = true;
-            SaveCommand = new RelayCommand(async _ => await SendDataRooms(), _ => CanSave());
+            SaveCommand = new RelayCommand(async _ => await SendDataRooms(),_ => CanSave());
             CancelCommand = new RelayCommand(w => CloseWindow(w as Window));
             LimpiarCommand = new RelayCommand(_ => Clean());
 

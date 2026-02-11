@@ -1,12 +1,10 @@
 ﻿using DesktopApp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
+using System.Text.Json.Serialization;
 
 namespace DesktopApp.Services
 {
@@ -137,5 +135,38 @@ namespace DesktopApp.Services
                 return respuestaJson;
         }
 
+<<<<<<< HEAD
     }
+=======
+        public async Task<List<User>> GetUsersByRolAsync(string rol)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"users/rol/{rol}");
+                if (!response.IsSuccessStatusCode)
+                    return new List<User>();
+
+                var json = await response.Content.ReadAsStringAsync();
+
+                var users = JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return users ?? new List<User>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener usuarios: " + ex.Message);
+                return new List<User>();
+            }
+        }
+
+    }
+
+
+
+
+
+>>>>>>> 3437da2 (fix: CRUD funcional)
 }

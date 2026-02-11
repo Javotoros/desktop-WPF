@@ -1,6 +1,6 @@
-﻿using DesktopApp.Models;
+using DesktopApp.Commands; // Importa AsyncRelayCommand
+using DesktopApp.Models;
 using DesktopApp.Services;
-using DesktopApp.Views.Reservation;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,9 +15,19 @@ namespace DesktopApp.ViewModels
     public class ReservationViewModel : INotifyPropertyChanged
     {
         private readonly ApiClient _apiClient;
-        
+
         //========LISTAR================
-        public Reservations ReservaSeleccionada { get; set; }
+        private Reservations _reservaSeleccionada;
+        public Reservations ReservaSeleccionada
+        {
+            get => _reservaSeleccionada;
+            set
+            {
+                _reservaSeleccionada = value;
+                OnPropertyChanged();
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
 
         public ICommand NuevaReservaCommand { get; }
         public ICommand CancelarReservaCommand { get; }
@@ -35,8 +45,10 @@ namespace DesktopApp.ViewModels
             {
                 _textoBusqueda = value;
                 OnPropertyChanged();
+                AplicarFiltro();
             }
         }
+
         private bool _ocultarCanceladas = true;
         public bool OcultarCanceladas
         {
@@ -47,16 +59,14 @@ namespace DesktopApp.ViewModels
                 {
                     _ocultarCanceladas = value;
                     OnPropertyChanged();
-                    AplicarFiltro(); // reaplica el filtro al cambiar el valor
+                    AplicarFiltro();
                 }
             }
         }
 
-
         //========CREAR================
         public ObservableCollection<Rooms> Habitaciones { get; } = new ObservableCollection<Rooms>();
         public ObservableCollection<Rooms> SelectedRooms { get; set; } = new ObservableCollection<Rooms>();
-
 
         private DateTime? _checkIn;
         public DateTime? CheckIn
@@ -90,24 +100,55 @@ namespace DesktopApp.ViewModels
         public ICommand CrearReservaCommand { get; }
         public ICommand VolverCommand { get; }
 
+        private string _dniBusqueda;
+        public string DNIBusqueda
+        {
+            get => _dniBusqueda;
+            set
+            {
+                _dniBusqueda = value;
+                OnPropertyChanged();
+                FiltrarUsuarios();
+            }
+        }
+
+        public ObservableCollection<User> Usuarios { get; } = new ObservableCollection<User>();
+        public ObservableCollection<User> UsuariosFiltrados { get; } = new ObservableCollection<User>();
+
+        private User _usuarioSeleccionado;
+        public User UsuarioSeleccionado
+        {
+            get => _usuarioSeleccionado;
+            set { _usuarioSeleccionado = value; OnPropertyChanged(); }
+        }
+
+
+        /// ==============================
+        /// =========CONSTRUCTOR==========
+        /// ==============================
 
         public ReservationViewModel()
         {
             _apiClient = new ApiClient();
 
-            BuscarCommand = new RelayCommand(AplicarFiltro);
-            LimpiarCommand = new RelayCommand(LimpiarFiltro);
+            //Comandos síncronos 
+            BuscarCommand = new RelayCommand(_ => AplicarFiltro());
+            LimpiarCommand = new RelayCommand(_ => LimpiarFiltro());
+            NuevaReservaCommand = new RelayCommand(_ => NuevaReserva());
+            BuscarClienteCommand = new RelayCommand(_ => BuscarCliente());
+            VolverCommand = new RelayCommand(_ => Volver());
 
-            NuevaReservaCommand = new RelayCommand(NuevaReserva);
-            CancelarReservaCommand = new RelayCommand(CancelarReserva, PuedeCancelar);
+            CancelarReservaCommand = new RelayCommand(
+                async _ => await CancelarReservaAsync()
+            );
 
-            BuscarClienteCommand = new RelayCommand(BuscarCliente);
-            CrearReservaCommand = new RelayCommand(async () => await CrearReservaAsync());
-            VolverCommand = new RelayCommand(Volver);
+
+            CrearReservaCommand = new RelayCommand(_ => { _ = CrearReservaAsync(); });
 
             _ = CargarHabitacionesAsync();
-
             _ = CargarReservasAsync();
+            _ = CargarUsuariosAsync();
+
         }
 
         //===============================
@@ -116,22 +157,26 @@ namespace DesktopApp.ViewModels
 
         private async Task CargarReservasAsync()
         {
-            var reservations = await _apiClient.GetReservasAsync();
-
-            foreach (var reservation in reservations)
+            try
             {
-                var rooms = await Task.WhenAll(reservation.RoomIds.Select(id => _apiClient.GetRoomsId(id)));
-                reservation.Rooms = rooms.Where(r => r != null).ToList();
+                var reservations = await _apiClient.GetReservasAsync();
+
+                // Cargar habitaciones para cada reserva
+                foreach (var reservation in reservations)
+                {
+                    var rooms = await Task.WhenAll(
+                        reservation.RoomIds.Select(id => _apiClient.GetRoomsId(id))
+                    );
+                    reservation.Rooms = rooms.Where(r => r != null).ToList();
+                }
+
+                _todas = new ObservableCollection<Reservations>(reservations);
+                AplicarFiltro();
             }
-
-            _todas = new ObservableCollection<Reservations>(reservations);
-
-            Reservas.Clear();
-            foreach (var r in reservations)
-                Reservas.Add(r);
-
-            AplicarFiltro();
-
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar reservas: " + ex.Message);
+            }
         }
 
         private void AplicarFiltro()
@@ -140,22 +185,20 @@ namespace DesktopApp.ViewModels
 
             var filtradas = _todas.AsEnumerable();
 
-            // Filtro por texto (habitaciones)
             if (!string.IsNullOrWhiteSpace(TextoBusqueda))
             {
                 filtradas = filtradas.Where(r =>
-                    r.Rooms != null &&
-                    r.Rooms.Any(h =>
-                        h.numRoom != null &&
-                        h.numRoom.ToString().Contains(TextoBusqueda)
-                    )
+                    r.Rooms?.Any(h =>
+                        h.numRoom.ToString().Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase)
+                    ) == true
                 );
             }
 
-            // Filtro para ocultar canceladas
             if (OcultarCanceladas)
             {
-                filtradas = filtradas.Where(r => r.Status.ToLower() != "cancelada");
+                filtradas = filtradas.Where(r =>
+                    !string.Equals(r.Status, "cancelada", StringComparison.OrdinalIgnoreCase)
+                );
             }
 
             Reservas.Clear();
@@ -163,34 +206,24 @@ namespace DesktopApp.ViewModels
                 Reservas.Add(r);
         }
 
-
         private void LimpiarFiltro()
         {
             TextoBusqueda = "";
             OcultarCanceladas = true;
-
-            Reservas.Clear();
-            foreach (var r in _todas)
-                Reservas.Add(r);
-
             AplicarFiltro();
         }
 
         private void NuevaReserva()
         {
             var mainWindow = Application.Current.MainWindow as MainWindow;
-            if (mainWindow != null)
+            if (mainWindow?.DataContext is MainViewModel vm)
             {
-                mainWindow.MainContent.Content = new AddReservationView();
+                vm.CurrentView = new Views.Reservation.AddReservationView();
             }
         }
-
-        private bool PuedeCancelar() => ReservaSeleccionada != null;
-
-        private async void CancelarReserva()
+        private async Task CancelarReservaAsync()
         {
-            if (ReservaSeleccionada == null)
-                return;
+            if (ReservaSeleccionada == null) return;
 
             try
             {
@@ -198,8 +231,8 @@ namespace DesktopApp.ViewModels
                 if (exito)
                 {
                     ReservaSeleccionada.Status = "cancelada";
-                    OnPropertyChanged(nameof(Reservas));
-                    MessageBox.Show($"Reserva con Id: {ReservaSeleccionada.Id} cancelada correctamente.");
+                    MessageBox.Show($"Reserva ID: {ReservaSeleccionada.Id} cancelada correctamente.");
+                    AplicarFiltro(); 
                 }
                 else
                 {
@@ -212,7 +245,6 @@ namespace DesktopApp.ViewModels
             }
         }
 
-
         //===============================
         //==========CREAR===============
         //===============================
@@ -223,12 +255,16 @@ namespace DesktopApp.ViewModels
             {
                 var rooms = await _apiClient.GetRooms();
                 var disponibles = rooms
-                    .Where(r => !string.IsNullOrEmpty(r.availability) && r.availability.ToLower() == "available")
+                    .Where(r =>
+                        r.availability != null &&
+                        r.availability.ToString().Equals("Available")
+                    )
                     .ToList();
 
                 Habitaciones.Clear();
                 foreach (var h in disponibles)
                     Habitaciones.Add(h);
+
             }
             catch (Exception ex)
             {
@@ -238,27 +274,20 @@ namespace DesktopApp.ViewModels
 
         private void BuscarCliente()
         {
-            //BUSQUEDA DEL CLIENTE
             ClienteInfo = "Usuario: Juan Perez (Prueba)";
         }
 
+        private bool PuedeCrearReserva() =>
+            SelectedRooms.Count > 0 &&
+            CheckIn.HasValue &&
+            CheckOut.HasValue &&
+            CheckOut > CheckIn;
+
         public async Task CrearReservaAsync()
         {
-            if (SelectedRooms.Count == 0)
+            if (!PuedeCrearReserva())
             {
-                MessageBox.Show("Por favor, selecciona al menos una habitación.");
-                return;
-            }
-
-            if (!CheckIn.HasValue || !CheckOut.HasValue)
-            {
-                MessageBox.Show("Por favor, selecciona las fechas de entrada y salida.");
-                return;
-            }
-
-            if (CheckOut <= CheckIn)
-            {
-                MessageBox.Show("La fecha de salida debe ser posterior a la de entrada.");
+                MessageBox.Show("Completa todos los campos correctamente.");
                 return;
             }
 
@@ -268,11 +297,11 @@ namespace DesktopApp.ViewModels
 
                 var nuevaReserva = new Reservations
                 {
-                    User = "63f1b2c8a1b2c3d4e5f67890", // usuario fijo para pruebas
+                    User = "63f1b2c8a1b2c3d4e5f67890",
                     RoomIds = roomIds,
                     CheckIn = CheckIn.Value.Date.AddHours(12),
                     CheckOut = CheckOut.Value.Date.AddHours(12),
-                    Status = SelectedStatus
+                    Status = SelectedStatus ?? "confirmada"
                 };
 
                 var errorJson = await _apiClient.PostReservationAsync(nuevaReserva);
@@ -280,10 +309,15 @@ namespace DesktopApp.ViewModels
                 if (string.IsNullOrEmpty(errorJson))
                 {
                     MessageBox.Show("Reserva creada correctamente.");
+
+                    // Limpiar formulario
                     SelectedRooms.Clear();
                     CheckIn = null;
                     CheckOut = null;
-                    SelectedStatus = null;
+                    SelectedStatus = "confirmada";
+
+                    // Recargar lista de reservas
+                    await CargarReservasAsync();
                 }
                 else
                 {
@@ -298,42 +332,56 @@ namespace DesktopApp.ViewModels
 
         private void Volver()
         {
-            var nuevaListaView = new Views.Reservation.ListReservationView();
             var mainWindow = Application.Current.MainWindow as MainWindow;
-            if (mainWindow != null)
-                mainWindow.MainContent.Content = nuevaListaView;
+            if (mainWindow?.DataContext is MainViewModel vm)
+            {
+                vm.CurrentView = new Views.Reservation.ListReservationView();
+            }
         }
+
+        private async Task CargarUsuariosAsync()
+        {
+            try
+            {
+                var lista = await _apiClient.GetUsersByRolAsync("Usuario");
+
+                Usuarios.Clear();
+                foreach (var u in lista)
+                    Usuarios.Add(u);
+
+                FiltrarUsuarios();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar usuarios: " + ex.Message);
+            }
+        }
+
+        private void FiltrarUsuarios()
+        {
+            if (Usuarios == null) return;
+
+            // Usar ToUpperInvariant() para que la búsqueda no sea case sensitive
+            var filtro = string.IsNullOrWhiteSpace(DNIBusqueda)
+                ? Usuarios
+                : new ObservableCollection<User>(
+                    Usuarios.Where(u => !string.IsNullOrEmpty(u.DNI) &&
+                                        u.DNI.ToUpperInvariant().Contains(DNIBusqueda.ToUpperInvariant()))
+                );
+
+            //Limpiar y volver a agregar
+            UsuariosFiltrados.Clear();
+            foreach (var u in filtro)
+                UsuariosFiltrados.Add(u);
+        }
+
 
 
         // Implementación de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    //RelayCommand
-    public class RelayCommand : ICommand
-    {
-        private readonly Action _execute;
-        private readonly Func<bool> _canExecute;
-
-        public RelayCommand(Action execute, Func<bool> canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute();
-
-        public void Execute(object parameter) => _execute();
     }
 }
