@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopApp.Services
+namespace DesktopApp.ViewModels
 {
-    internal class ApiClient
+    internal class HeaderControlViewModel
     {
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DesktopApp.Models;
+using DesktopApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +17,19 @@ using System.Windows.Shapes;
 namespace DesktopApp.Views
 {
     /// <summary>
-    /// Interaction logic for RoomsView.xaml
+    /// Interaction logic for FormRoomsView.xaml
     /// </summary>
-    public partial class RoomsView : Window
+    public partial class FormRoomsView : Window
     {
-        public RoomsView()
+        public FormRoomsView()
         {
             InitializeComponent();
+            DataContext = new FormRoomsViewModel();
+        }
+        public FormRoomsView(Rooms room) 
+        {
+            InitializeComponent();
+            DataContext = new FormRoomsViewModel(room);
         }
     }
 }

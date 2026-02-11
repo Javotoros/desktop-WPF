@@ -12,21 +12,17 @@ namespace DesktopApp.Models
         [JsonPropertyName("_id")]
         public string Id { get; set; }
         public int numRoom { get; set; }
-        public int roomFloor { get; set; }
-        public string roomType { get; set; }
+        public int numFloor { get; set; }
+        public enum RoomType { Single, Double, Triple, Fourfold}
+        public RoomType roomType { get; set; }
         public string description { get; set; }
-
-        public List<string> image { get; set; }
+        public List<string> image { get; set; } = new();
 
         public float pricePerNight { get; set; }
         public int maxOccupancy{ get; set; }
+        public  enum Availability {  Available, Unavailable,Block }
+        public Availability availability { get; set; }
 
-        public List<string> reviews { get; set; }
-        public string availability { get; set; }
-
-        public override string ToString()
-        {
-            return $"Habitación {numRoom} - Piso {roomFloor}";
-        }
+        public int ReviewCount { get; set; }
     }
 }
