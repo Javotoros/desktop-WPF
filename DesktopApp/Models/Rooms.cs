@@ -13,14 +13,18 @@ namespace DesktopApp.Models
         public string Id { get; set; }
         public int numRoom { get; set; }
         public int numFloor { get; set; }
-        public enum RoomType { Single, Double, Triple, Fourfold}
+        public enum RoomType { Single, Double, Triple, Fourfold }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public RoomType roomType { get; set; }
         public string description { get; set; }
         public List<string> image { get; set; } = new();
 
         public float pricePerNight { get; set; }
-        public int maxOccupancy{ get; set; }
-        public  enum Availability {  Available, Unavailable,Block }
+        public int maxOccupancy { get; set; }
+        public enum Availability { Available, Unavailable, Block }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public Availability availability { get; set; }
 
         public int ReviewCount { get; set; }

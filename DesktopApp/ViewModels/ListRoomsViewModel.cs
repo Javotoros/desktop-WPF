@@ -43,7 +43,7 @@ namespace DesktopApp.ViewModels
         public ICommand DeleteRoomCommand { get; }
         public ListRoomsViewModel()
         {
-            _ = LoadRoomsAsync();
+            _ = LoadRoomsAsync(); 
             DeleteRoomCommand = new RelayCommand(async _=>await DeleteDataRooms(), _ => SelectedRoom != null);
         }
         public async Task LoadRoomsAsync()
