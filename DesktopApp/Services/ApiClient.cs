@@ -68,13 +68,91 @@ namespace DesktopApp.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-
             var rooms = JsonSerializer.Deserialize<List<Rooms>>(json, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() }
             });
+            return rooms;
+        }
 
-            return rooms ?? new List<Rooms>();
+        public async Task<int> GetNextRoom(int numFloor)
+        {
+            var response = await _httpClient.GetAsync($"rooms/nextRoom/{numFloor}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(json);
+            }
+            int newRoom = JsonSerializer.Deserialize<int>(json);
+            return newRoom;
+        }
+        public async Task<string> PostRooms(int numFloor, string roomType, string description, int pricePerNight, int maxOccupancy, string availability)
+        {
+            var values = new Dictionary<string, string>()
+                {
+                    { "numFloor", numFloor.ToString()},
+                    { "roomType",roomType.ToLower()},
+                    { "description",description},
+                    { "pricePerNight",pricePerNight.ToString()},
+                    { "maxOccupancy",maxOccupancy.ToString()},
+                    { "availability",availability.ToLower()}
+                 };
+            var content = new FormUrlEncodedContent(values);
+            var response = await _httpClient.PostAsync("rooms/add", content);
+            var body = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"{(int)response.StatusCode} {response.ReasonPhrase}\n{body}");
+
+            return body;
+        }
+
+        public async Task updateIdRoom(string id, string roomType, string description, int pricePerNight, int maxOccupancy, string availability)
+        {
+            var values = new Dictionary<string, string>()
+                {
+                    { "roomType",roomType.ToLower()},
+                    { "description",description},
+                    { "pricePerNight",pricePerNight.ToString()},
+                    { "maxOccupancy",maxOccupancy.ToString()},
+                    { "availability",availability.ToLower()}
+                 };
+            var content = new FormUrlEncodedContent(values);
+            var response = await _httpClient.PatchAsync($"rooms/modify/{id}", content);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"{(int)response.StatusCode} {response.ReasonPhrase}");
+
+        }
+
+        public async Task DeleteIdRoom(string id)
+        {
+            var response = await _httpClient.DeleteAsync($"rooms/delete/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(json);
+            }
+        }
+        public async Task DeleteIdImgRoom(string id, string imagePath)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"rooms/delete/{id}/images")
+            {
+                Content = new StringContent(
+                    JsonSerializer.Serialize(new { image = imagePath }),
+                    Encoding.UTF8,
+                    "application/json"
+                )
+            }
+            ;
+            var response = await _httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task<Rooms> GetRoomsId(string id)
@@ -91,33 +169,64 @@ namespace DesktopApp.Services
             return rooms;
         }
 
-        public async Task<bool> PostRooms(int numFloor, string roomType, string description,
-                    string image, int pricePerNight, string reviews, int maxOccupancy, string availability)
+        public async Task PostIdImgRoom(string id, List<string> filePaths)
         {
-            try
+            using var form = new MultipartFormDataContent();
+
+            foreach (var p in filePaths)
             {
-                var values = new Dictionary<string, string>()
+                var bytes = await File.ReadAllBytesAsync(p);
+                var content = new ByteArrayContent(bytes);
+
+                var ext = Path.GetExtension(p).ToLowerInvariant();
+
+                string type;
+
+                switch (ext)
                 {
-                    { "numFloor", numFloor.ToString()},
-                    { "roomType",roomType},
-                    { "description",description},
-                    { "image",image},
-                    { "pricePerNight",pricePerNight.ToString()},
-                    { "reviews",reviews},
-                    { "maxOccupancy",maxOccupancy.ToString()},
-                    { "availability",availability}
-                 };
-                var content = new FormUrlEncodedContent(values);
-                var response = await _httpClient.PostAsync("add", content);
-                return response.IsSuccessStatusCode;
+                    case ".jpg":
+                    case ".jpeg":
+                        type = "image/jpeg";
+                        break;
+
+                    case ".png":
+                        type = "image/png";
+                        break;
+
+                    case ".webp":
+                        type = "image/webp";
+                        break;
+
+                    default:
+                        type = "application/octet-stream";
+                        break;
+                }
+
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(type);
+
+                form.Add(content, "images", Path.GetFileName(p));
             }
-            catch (Exception e)
+
+            var response = await _httpClient.PostAsync($"rooms/add/{id}/images", form);
+            response.EnsureSuccessStatusCode();
+
+        }
+
+        public async Task<List<Reviews>> GetReviewIdRoom(string id)
+        {
+            var response = await _httpClient.GetAsync($"reviews/room/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine(e);
-                return false;
+                throw new Exception(json);
             }
-
-
+            var reviews = JsonSerializer.Deserialize<List<Reviews>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return reviews;
         }
 
         public async Task<string> PostReservationAsync(Reservations reserva)
@@ -135,9 +244,6 @@ namespace DesktopApp.Services
                 return respuestaJson;
         }
 
-<<<<<<< HEAD
-    }
-=======
         public async Task<List<User>> GetUsersByRolAsync(string rol)
         {
             try
@@ -168,5 +274,4 @@ namespace DesktopApp.Services
 
 
 
->>>>>>> 3437da2 (fix: CRUD funcional)
 }

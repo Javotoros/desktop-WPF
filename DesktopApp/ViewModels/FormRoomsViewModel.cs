@@ -1,12 +1,20 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using DesktopApp.Commands;
 using DesktopApp.Models;
 using DesktopApp.Services;
 using System.Windows.Input;
 using System.Windows;
 using System.Text.Json;
 using System.Collections.ObjectModel;
-using DesktopApp.Commands;
+using Microsoft.Win32;
+using System.IO;
+using System.Text;
 
 namespace DesktopApp.ViewModels
 {
@@ -18,7 +26,7 @@ namespace DesktopApp.ViewModels
     /// - Validar campos para habilitar/deshabilitar el botón Guardar
     /// - Gestionar imágenes (seleccionar, quitar, subir y borrar)
     /// </summary>
-    public class FormRoomsViewModel:INotifyPropertyChanged
+    public class FormRoomsViewModel : INotifyPropertyChanged
     {
         // Cliente para llamar a la API (GET/POST/PATCH/DELETE)
         private readonly ApiClient _api = new ApiClient();
@@ -175,12 +183,12 @@ namespace DesktopApp.ViewModels
         {
 
             IsEditing = true;
-            SaveCommand = new RelayCommand(async _ => await SendDataRooms(),_ => CanSave());
+            SaveCommand = new RelayCommand(async _ => await SendDataRooms(), _ => CanSave());
             CancelCommand = new RelayCommand(w => CloseWindow(w as Window));
             LimpiarCommand = new RelayCommand(_ => Clean());
 
             PickImagesCommand = new RelayCommand(_ => PickImages());
-            RemoveImageCommand = new RelayCommand( p =>  RemoveImage(p as string));
+            RemoveImageCommand = new RelayCommand(p => RemoveImage(p as string));
 
 
         }
@@ -189,7 +197,7 @@ namespace DesktopApp.ViewModels
         /// Constructor para editar una habitación.
         /// Carga los datos iniciales y las imágenes desde la API.
         /// </summary>
-        public FormRoomsViewModel(Rooms room):this()
+        public FormRoomsViewModel(Rooms room) : this()
         {
             SelectedRoom = room;
             IsEditing = false;
@@ -232,7 +240,7 @@ namespace DesktopApp.ViewModels
                     var previewLine = $"{System.IO.Path.GetFileName(file)}";
                     Images.Add(previewLine);
 
-                    
+
                 }
                 ImageUrlDraft = $"{Images.Count} imagen(es)";
             }
@@ -299,7 +307,7 @@ namespace DesktopApp.ViewModels
                 if (!RemoteImagesToDelete.Contains(item))
                     RemoteImagesToDelete.Add(item);
             }
-            
+
             ImageUrlDraft = $"{Images.Count} imagen(es)";
         }
 
@@ -402,7 +410,7 @@ namespace DesktopApp.ViewModels
                     MessageBoxImage.Information
                 );
                 Clean();
-                Images.Clear() ;
+                Images.Clear();
                 LocalImagesToUpload.Clear();
                 ImageUrlDraft = null;
             }

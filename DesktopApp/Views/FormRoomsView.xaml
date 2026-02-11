@@ -166,7 +166,7 @@
 
                         </StackPanel>
                     </Border>
-                    
+
                     <!--Imagenes-->
                     <Border Grid.ColumnSpan="3" Grid.Row="1" Style="{StaticResource CardBorder}">
                         <StackPanel>

@@ -38,8 +38,8 @@ namespace DesktopApp.ViewModels
 
         public MainViewModel()
         {
-            SelectedMenu = "rooms";
-            CurrentView = new ListRoomsView();
+            SelectedMenu = "bookings";
+            CurrentView = new ListReservationView();
             NavigateCommand = new RelayCommand(Navigation);
 
         }
