@@ -17,16 +17,16 @@
                 <TextBox Text="{Binding DNIBusqueda, UpdateSourceTrigger=PropertyChanged}" Height="28" Width="150" />
 
                 <ListBox ItemsSource="{Binding UsuariosFiltrados}" 
-                         SelectedItem="{Binding UsuarioSeleccionado}" 
-                         DisplayMemberPath="DisplayInfo" 
-                         Height="80" Width="200"
-                         Background="#FFF0F0F0" Foreground="Black"/>
+                     SelectedItem="{Binding UsuarioSeleccionado, Mode=TwoWay}" 
+                     DisplayMemberPath="DisplayInfo" 
+                     Height="80" Width="200"/>
             </StackPanel>
 
             <!-- Habitación -->
             <TextBlock Text="Habitaciones" FontWeight="SemiBold" Margin="0,5,0,2"/>
             <ListBox x:Name="lbHabitaciones" Height="80" Width="200" SelectionMode="Extended" DisplayMemberPath="numRoom" 
                      ItemsSource="{Binding Habitaciones}"
+                     SelectionChanged="LbHabitaciones_SelectionChanged"
                      Background="#FFF0F0F0" Foreground="Black"/>
 
             <!-- Fecha de Entrada y Salida -->
@@ -53,8 +53,7 @@
 
             <!-- Botones -->
             <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Center">
-                <Button Content="Crear Reserva" Width="150" Height="30" Command="{Binding NuevaReservaCommand}"/>
-                <Button Content="Volver" Width="100" Height="30"  Margin="10,0,0,0" Command="{Binding VolverCommand}"/>
+                <Button Content="Crear Reserva" Width="200" Height="30" Command="{Binding CrearReservaCommand}"/>
             </StackPanel>
         </StackPanel>
     </Border>

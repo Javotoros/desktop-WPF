@@ -13,7 +13,9 @@ namespace DesktopApp.Models
         public string Id { get; set; }
 
         [JsonPropertyName("userId")]
-        public string User { get; set; }           
+        public string User { get; set; }
+
+        [JsonIgnore] // No se envía al backend
         public List<Rooms> Rooms { get; set; } = new List<Rooms>();
 
         [JsonPropertyName("roomIds")]
@@ -27,6 +29,12 @@ namespace DesktopApp.Models
 
         [JsonPropertyName("status")]
         public string Status { get; set; }
+
+        [JsonIgnore]
+        public string UserDNI { get; set; }
+
+        [JsonIgnore]
+        public string UserNombre { get; set; }
 
         public string RoomNumbers
         {

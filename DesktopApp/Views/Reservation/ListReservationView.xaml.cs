@@ -17,9 +17,5 @@ namespace DesktopApp.Views.Reservation
 
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-
-        }
     }
 }

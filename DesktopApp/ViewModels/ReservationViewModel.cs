@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 
 namespace DesktopApp.ViewModels
 {
@@ -122,6 +123,8 @@ namespace DesktopApp.ViewModels
             set { _usuarioSeleccionado = value; OnPropertyChanged(); }
         }
 
+        public ICommand VerCanceladasCommand { get; }
+
 
         /// ==============================
         /// =========CONSTRUCTOR==========
@@ -135,7 +138,6 @@ namespace DesktopApp.ViewModels
             BuscarCommand = new RelayCommand(_ => AplicarFiltro());
             LimpiarCommand = new RelayCommand(_ => LimpiarFiltro());
             NuevaReservaCommand = new RelayCommand(_ => NuevaReserva());
-            BuscarClienteCommand = new RelayCommand(_ => BuscarCliente());
             VolverCommand = new RelayCommand(_ => Volver());
 
             CancelarReservaCommand = new RelayCommand(
@@ -160,6 +162,9 @@ namespace DesktopApp.ViewModels
             try
             {
                 var reservations = await _apiClient.GetReservasAsync();
+                var usuarios = await _apiClient.GetUsersByRolAsync("Usuario");
+
+
 
                 // Cargar habitaciones para cada reserva
                 foreach (var reservation in reservations)
@@ -168,7 +173,16 @@ namespace DesktopApp.ViewModels
                         reservation.RoomIds.Select(id => _apiClient.GetRoomsId(id))
                     );
                     reservation.Rooms = rooms.Where(r => r != null).ToList();
+
+                    var user = usuarios.FirstOrDefault(u => u.Id == reservation.User);
+
+                    if (user != null)
+                    {
+                        reservation.UserDNI = user.DNI;
+                        reservation.UserNombre = user.NombreCompleto;
+                    }
                 }
+
 
                 _todas = new ObservableCollection<Reservations>(reservations);
                 AplicarFiltro();
@@ -270,11 +284,6 @@ namespace DesktopApp.ViewModels
             }
         }
 
-        private void BuscarCliente()
-        {
-            ClienteInfo = "Usuario: Juan Perez (Prueba)";
-        }
-
         private bool PuedeCrearReserva() =>
             SelectedRooms.Count > 0 &&
             CheckIn.HasValue &&
@@ -283,11 +292,12 @@ namespace DesktopApp.ViewModels
 
         public async Task CrearReservaAsync()
         {
-            if (UsuarioSeleccionado == null)
+            if (UsuarioSeleccionado == null || string.IsNullOrEmpty(UsuarioSeleccionado.Id))
             {
                 MessageBox.Show("Por favor, selecciona un cliente de la lista.");
                 return;
             }
+
 
             if (!PuedeCrearReserva())
             {
@@ -307,6 +317,12 @@ namespace DesktopApp.ViewModels
                     CheckOut = CheckOut.Value.Date.AddHours(12),
                     Status = SelectedStatus ?? "confirmada"
                 };
+
+                var jsonDebug = System.Text.Json.JsonSerializer.Serialize(
+                    nuevaReserva,
+                    new System.Text.Json.JsonSerializerOptions { WriteIndented = true }
+                );
+
 
                 var errorJson = await _apiClient.PostReservationAsync(nuevaReserva);
 
@@ -348,13 +364,13 @@ namespace DesktopApp.ViewModels
             try
             {
                 var lista = await _apiClient.GetUsersByRolAsync("Usuario");
-                MessageBox.Show($"API devolvió: {lista.Count()} usuarios.");
 
                 Usuarios.Clear();
                 foreach (var u in lista)
                     Usuarios.Add(u);
 
                 FiltrarUsuarios();
+                
             }
             catch (Exception ex)
             {
@@ -365,7 +381,7 @@ namespace DesktopApp.ViewModels
         private void FiltrarUsuarios()
         {
             if (Usuarios == null) return;
-
+            MessageBox.Show(DNIBusqueda);
             var filtro = string.IsNullOrWhiteSpace(DNIBusqueda)
                 ? Usuarios
                 : new ObservableCollection<User>(
@@ -377,8 +393,51 @@ namespace DesktopApp.ViewModels
             UsuariosFiltrados.Clear();
             foreach (var u in filtro)
                 UsuariosFiltrados.Add(u);
+
+            UsuarioSeleccionado = UsuariosFiltrados.FirstOrDefault();
+
         }
 
+        //===============================
+        //==========Eliminar===============
+        //===============================
+
+        private async Task CargarReservasCanceladasAsync()
+        {
+            try
+            {
+                var reservations = await _apiClient.GetReservasAsync();
+                var usuarios = await _apiClient.GetUsersByRolAsync("Usuario");
+
+                // Filtrar solo las canceladas
+                var canceladas = reservations
+                    .Where(r => r.Status != null && r.Status.Equals("cancelada", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                // Cargar habitaciones y datos del usuario
+                foreach (var reservation in canceladas)
+                {
+                    var rooms = await Task.WhenAll(
+                        reservation.RoomIds.Select(id => _apiClient.GetRoomsId(id))
+                    );
+                    reservation.Rooms = rooms.Where(r => r != null).ToList();
+
+                    var user = usuarios.FirstOrDefault(u => u.Id == reservation.User);
+                    if (user != null)
+                    {
+                        reservation.UserDNI = user.DNI;
+                        reservation.UserNombre = user.NombreCompleto;
+                    }
+                }
+
+                _todas = new ObservableCollection<Reservations>(canceladas);
+                AplicarFiltro(); // opcional, si quieres filtros extra
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar reservas canceladas: " + ex.Message);
+            }
+        }
 
 
         // Implementación de INotifyPropertyChanged

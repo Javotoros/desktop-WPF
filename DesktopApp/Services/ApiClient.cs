@@ -36,7 +36,6 @@ namespace DesktopApp.Services
         private HttpRequestMessage CreateRequest(HttpMethod method, string url)
         {
             var request = new HttpRequestMessage(method, url);
-            MessageBox.Show(_token);
             if (!string.IsNullOrEmpty(_token))
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -47,7 +46,7 @@ namespace DesktopApp.Services
 
         public async Task<List<Reservations>> GetReservasAsync()
         {
-           var request = CreateRequest(HttpMethod.Get, $"reservations");
+            var request = CreateRequest(HttpMethod.Get, $"reservations");
             var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
@@ -55,7 +54,7 @@ namespace DesktopApp.Services
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var bookings =  JsonSerializer.Deserialize<List<Reservations>>(json, new JsonSerializerOptions
+            var bookings = JsonSerializer.Deserialize<List<Reservations>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -67,7 +66,7 @@ namespace DesktopApp.Services
         {
             try
             {
-                var request = CreateRequest(HttpMethod.Delete, $"reservations/delete/{reservationId}");
+                var request = CreateRequest(HttpMethod.Patch, $"reservations/cancel/{reservationId}");
                 var response = await _httpClient.SendAsync(request);
 
                 // Depuración:
@@ -263,7 +262,7 @@ namespace DesktopApp.Services
             var respuestaJson = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
-                return null; 
+                return null;
             else
                 return respuestaJson;
         }
@@ -279,6 +278,8 @@ namespace DesktopApp.Services
         }
 
 
+
+
         public async Task<string> LoginAsync(string email, string password)
         {
             var payload = new { email, password };
@@ -292,14 +293,57 @@ namespace DesktopApp.Services
             string token = doc.RootElement.GetProperty("token").GetString();
 
             SetToken(token); // Guardamos solo la variable
-            MessageBox.Show(token);
             return token;
         }
 
+        public async Task<User> GetUserByIdOrDniAsync(string searchData, string searchProperty)
+        {
+            if (string.IsNullOrEmpty(searchData) || string.IsNullOrEmpty(searchProperty))
+                return null;
+
+            try
+            {
+                var payload = new {searchData,searchProperty};
+                var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+
+                var response = await _httpClient.PostAsync("users/getOneUserByIdOrDni", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var user = await response.Content.ReadFromJsonAsync<User>();
+                    return user;
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<bool> DeleteReservationAsync(string reservationId)
+        {
+            try
+            {
+                var request = CreateRequest(HttpMethod.Delete, $"reservations/{reservationId}");
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var contenido = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Error API: {response.StatusCode}\n{contenido}");
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
     }
-
-
-
-
 
 }
