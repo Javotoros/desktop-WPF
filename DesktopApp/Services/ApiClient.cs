@@ -1,19 +1,21 @@
 ﻿using DesktopApp.Models;
+using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Windows;
-using System.IO;
 using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace DesktopApp.Services
 {
     public class ApiClient
     {
+        private static ApiClient _instance;
         private readonly HttpClient _httpClient;
+        private static string _token;
 
-
-        // URL base de tu API
         private const string BASE_URL = "http://localhost:3000/";
 
         public ApiClient()
@@ -22,17 +24,35 @@ namespace DesktopApp.Services
             _httpClient.BaseAddress = new Uri(BASE_URL);
         }
 
+        public static ApiClient Instance => _instance ??= new ApiClient();
+
+        public void SetToken(string token)
+        {
+            _token = token;
+        }
+
+        private HttpRequestMessage CreateRequest(HttpMethod method, string url)
+        {
+            var request = new HttpRequestMessage(method, url);
+            if (!string.IsNullOrEmpty(_token))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            }
+            return request;
+        }
+
 
         public async Task<List<Reservations>> GetReservasAsync()
         {
-            var response = await _httpClient.GetAsync("reservations");
+            var request = CreateRequest(HttpMethod.Get, $"reservations");
+            var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
                 return new List<Reservations>();
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var bookings =  JsonSerializer.Deserialize<List<Reservations>>(json, new JsonSerializerOptions
+            var bookings = JsonSerializer.Deserialize<List<Reservations>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -44,7 +64,8 @@ namespace DesktopApp.Services
         {
             try
             {
-                var response = await _httpClient.DeleteAsync($"reservations/delete/{reservationId}");
+                var request = CreateRequest(HttpMethod.Patch, $"reservations/cancel/{reservationId}");
+                var response = await _httpClient.SendAsync(request);
 
                 // Depuración:
                 if (!response.IsSuccessStatusCode)
@@ -239,39 +260,88 @@ namespace DesktopApp.Services
             var respuestaJson = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
-                return null; 
+                return null;
             else
                 return respuestaJson;
         }
 
         public async Task<List<User>> GetUsersByRolAsync(string rol)
         {
+            var request = CreateRequest(HttpMethod.Get, $"/users/rol/{rol}");
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+
+
+
+        public async Task<string> LoginAsync(string email, string password)
+        {
+            var payload = new { email, password };
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("auth/login", content);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            string token = doc.RootElement.GetProperty("token").GetString();
+
+            SetToken(token); // Guardamos solo la variable
+            return token;
+        }
+
+        public async Task<User> GetUserByIdOrDniAsync(string searchData, string searchProperty)
+        {
+            if (string.IsNullOrEmpty(searchData) || string.IsNullOrEmpty(searchProperty))
+                return null;
+
             try
             {
-                var response = await _httpClient.GetAsync($"users/rol/{rol}");
-                if (!response.IsSuccessStatusCode)
-                    return new List<User>();
+                var payload = new {searchData,searchProperty};
+                var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
-                var json = await response.Content.ReadAsStringAsync();
 
-                var users = JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
+                var response = await _httpClient.PostAsync("users/getOneUserByIdOrDni", content);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    PropertyNameCaseInsensitive = true
-                });
+                    var user = await response.Content.ReadFromJsonAsync<User>();
+                    return user;
+                }
 
-                return users ?? new List<User>();
+                return null;
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Error al obtener usuarios: " + ex.Message);
-                return new List<User>();
+                return null;
+            }
+        }
+        public async Task<bool> DeleteReservationAsync(string reservationId)
+        {
+            try
+            {
+                var request = CreateRequest(HttpMethod.Delete, $"reservations/delete/{reservationId}");
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var contenido = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Error API: {response.StatusCode}\n{contenido}");
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
+
+
     }
-
-
-
-
 
 }

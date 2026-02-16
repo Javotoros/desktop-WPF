@@ -1,28 +1,28 @@
 ﻿using DesktopApp.ViewModels;
 using DesktopApp.Views;
-using DesktopApp.Views.Reservation;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DesktopApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+
+            // Mostramos la ventana de login antes de iniciar MainWindow
+            var loginWindow = new LoginView();
+            bool? loginResult = loginWindow.ShowDialog();
+
+            if (loginResult != true)
+            {
+                // Si el login falla o se cierra, cerramos la aplicación
+                Application.Current.Shutdown();
+                return;
+            }
+
+            // Si login fue exitoso, asignamos el DataContext
+            this.DataContext = new MainViewModel();
         }
     }
 }
