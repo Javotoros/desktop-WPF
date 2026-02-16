@@ -17,11 +17,8 @@
                     <Button Content="Eliminar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding DeleteReservationCommand}"/>
                 </StackPanel>
 
-                <!-- Derecha (filtro) -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-
                     <TextBox x:Name="txtBuscar" Width="200" Height="35" Margin="10,0,0,10" Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
-
                     <Button Content="Limpiar" Command="{Binding LimpiarCommand}" Height="35" Margin="20,0,0,10" Width="75" />
                 </StackPanel>
             </Grid>

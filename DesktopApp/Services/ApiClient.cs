@@ -26,13 +26,11 @@ namespace DesktopApp.Services
 
         public static ApiClient Instance => _instance ??= new ApiClient();
 
-        // ⚡ Solo guardamos el token en la variable
         public void SetToken(string token)
         {
             _token = token;
         }
 
-        // ⚡ Método helper para crear requests con Authorization
         private HttpRequestMessage CreateRequest(HttpMethod method, string url)
         {
             var request = new HttpRequestMessage(method, url);
