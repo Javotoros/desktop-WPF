@@ -15,9 +15,9 @@
 
                 <!-- Izquierda (vacío o título) -->
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Nueva Reserva" Width="140" Height="35" Margin="0,0,0,10" Command="{Binding NuevaReservaCommand}"/>
+                    <Button Content="Nueva Reserva" Width="140" Height="35" Margin="0,0,0,10" Click="Nueva_Reserva"/>
                     <Button Content="Cancelar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding CancelarReservaCommand}"/>
-                    <Button Content="Eliminar" Width="150" Height="35" Margin="10,0,0,10" Command="{Binding VerCanceladasCommand}"/>
+                    <Button Content="Eliminar" Width="150" Height="35" Margin="10,0,0,10" Click="Eliminar_Reserva"/>
                 </StackPanel>
 
                 <!-- Derecha (filtro) -->

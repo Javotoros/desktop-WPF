@@ -27,7 +27,7 @@ namespace DesktopApp.ViewModels
 
         public LoginViewModel()
         {
-            _apiClient = ApiClient.Instance; // 🔹 Usamos el singleton
+            _apiClient = ApiClient.Instance;
             LoginCommand = new RelayCommand(async param => await LoginAsync(param));
         }
 

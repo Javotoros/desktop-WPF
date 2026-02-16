@@ -326,7 +326,7 @@ namespace DesktopApp.Services
         {
             try
             {
-                var request = CreateRequest(HttpMethod.Delete, $"reservations/{reservationId}");
+                var request = CreateRequest(HttpMethod.Delete, $"reservations/delete/{reservationId}");
                 var response = await _httpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {

@@ -23,7 +23,7 @@ namespace DesktopApp.Views.Reservation
         public DeleteCancelledReservationsView()
         {
             InitializeComponent();
-            DataContext = new ReservationViewModel();
+            DataContext = new DeleteCancelledReservationsViewModel();
 
         }
     }

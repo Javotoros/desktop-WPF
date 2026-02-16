@@ -10,22 +10,20 @@ namespace DesktopApp.Views.Reservation
         public AddReservationView()
         {
             InitializeComponent();
-            DataContext = new ReservationViewModel();
+            DataContext = new ReservationCreateViewModel();
             lbHabitaciones.SelectionChanged += LbHabitaciones_SelectionChanged;
-
         }
 
         private void LbHabitaciones_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (DataContext is ReservationViewModel vm)
+            if (DataContext is ReservationCreateViewModel vm)
             {
                 vm.SelectedRooms.Clear();
                 foreach (Rooms room in lbHabitaciones.SelectedItems)
                 {
                     vm.SelectedRooms.Add(room);
-                }
-            }
+                }                
+            }            
         }
-
     }
 }

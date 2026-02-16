@@ -13,15 +13,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Izquierda (vacío o título) -->
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Nueva Reserva" Width="140" Height="35" Margin="0,0,0,10" Command="{Binding NuevaReservaCommand}"/>
-                    <Button Content="Cancelar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding CancelarReservaCommand}"/>
+                    <Button Content="Eliminar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding DeleteReservationCommand}"/>
                 </StackPanel>
 
                 <!-- Derecha (filtro) -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <CheckBox Content="Ocultar canceladas" Margin="20,0,0,10" IsChecked="{Binding OcultarCanceladas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBox x:Name="txtBuscar" Width="200" Height="35" Margin="10,0,0,10" Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
 
@@ -34,7 +31,7 @@
               IsReadOnly="True"
               Margin="10" 
               ItemsSource="{Binding Reservas}"
-              SelectedItem="{Binding ReservaSeleccionada, Mode=TwoWay}">
+              SelectedItem="{Binding SelectedReservation, Mode=TwoWay}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*" />
