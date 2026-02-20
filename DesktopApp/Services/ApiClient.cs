@@ -289,9 +289,13 @@ namespace DesktopApp.Services
             var json = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(json);
             string token = doc.RootElement.GetProperty("token").GetString();
-
-            SetToken(token); // Guardamos solo la variable
-            return token;
+            string userRol = doc.RootElement.GetProperty("rol").GetString();
+            if(userRol != "Usuario")
+            {
+                SetToken(token); // Guardamos solo la variable
+                return token;
+            }
+            return null;
         }
 
         public async Task<User> GetUserByIdOrDniAsync(string searchData, string searchProperty)
