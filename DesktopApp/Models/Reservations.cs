@@ -30,6 +30,12 @@ namespace DesktopApp.Models
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
+        [JsonPropertyName("totalPrice")]
+        public float TotalPrice { get; set; }
+
+        [JsonPropertyName("numGuests")] 
+        public int NumGuests { get; set; }
+
         [JsonIgnore]
         public string UserDNI { get; set; }
 

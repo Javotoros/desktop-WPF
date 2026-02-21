@@ -4,49 +4,99 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             Background="#F8FAFC"
              d:DesignHeight="400" d:DesignWidth="600">
-    <Grid>
-        <StackPanel Orientation="Vertical" Margin="10">
-            <Grid Margin="0,0,0,10">
+
+    <Grid Margin="30">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER CARD -->
+        <Border Style="{StaticResource CardBorder}" Grid.Row="0">
+
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Izquierda (vacío o título) -->
+                <!-- Botones izquierda -->
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Nueva Reserva" Width="140" Height="35" Margin="0,0,0,10" Click="Nueva_Reserva"/>
-                    <Button Content="Cancelar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding CancelarReservaCommand}"/>
-                    <Button Content="Eliminar" Width="150" Height="35" Margin="10,0,0,10" Click="Eliminar_Reserva"/>
+
+                    <Button Content="Nueva Reserva"
+                            Style="{StaticResource ActionButton}"
+                            Click="Nueva_Reserva"/>
+
+                    <Button Content="Cancelar"
+                            Style="{StaticResource ActionButton}"
+                            Background="#EF4444"
+                            Margin="10,0,0,0"
+                            Command="{Binding CancelarReservaCommand}"/>
+
+                    <Button Content="Eliminar"
+                            Style="{StaticResource ActionButton}"
+                            Background="#111827"
+                            Foreground="White"
+                            Margin="10,0,0,0"
+                            Click="Eliminar_Reserva"/>
+
                 </StackPanel>
 
-                <!-- Derecha (filtro) -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <CheckBox Content="Ocultar canceladas" Margin="20,0,0,10" IsChecked="{Binding OcultarCanceladas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <!-- Filtro derecha -->
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
 
-                    <TextBox x:Name="txtBuscar" Width="200" Height="35" Margin="10,0,0,10" Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+                    <CheckBox Content="Ocultar canceladas"
+                              Margin="0,0,20,0"
+                              VerticalAlignment="Center"
+                              IsChecked="{Binding OcultarCanceladas, Mode=TwoWay}"/>
 
-                    <Button Content="Limpiar" Command="{Binding LimpiarCommand}" Height="35" Margin="20,0,0,10" Width="75" />
+                    <TextBox Width="220"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,10,0"/>
+
+                    <Button Content="Limpiar"
+                            Style="{StaticResource ActionButton}"
+                            Background="#6B7280"
+                            Command="{Binding LimpiarCommand}"/>
+
                 </StackPanel>
+
             </Grid>
 
+        </Border>
+
+        <!-- DATA CARD -->
+        <Border Grid.Row="2"
+                Style="{StaticResource CardBorder}">
+
             <DataGrid x:Name="dgReservation"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Margin="10" 
-                  ItemsSource="{Binding Reservas}"
-                  SelectedItem="{Binding ReservaSeleccionada, Mode=TwoWay}">
+                      Style="{StaticResource ModernDataGrid}"
+                      ItemsSource="{Binding Reservas}"
+                      SelectedItem="{Binding ReservaSeleccionada, Mode=TwoWay}"
+                      AutoGenerateColumns="False">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*" />
                     <DataGridTextColumn Header="Usuario(DNI)" Binding="{Binding UserDNI}" Width="*" />
                     <DataGridTextColumn Header="Usuario(Nombre)" Binding="{Binding UserNombre}" Width="*" />
                     <DataGridTextColumn Header="Habitaciones" Binding="{Binding RoomNumbers}" Width="*" />
+                    <DataGridTextColumn Header="Personas" Binding="{Binding NumGuests}" Width="*" />
                     <DataGridTextColumn Header="Entrada" Binding="{Binding CheckIn, StringFormat=dd/MM/yyyy}" Width="*" />
                     <DataGridTextColumn Header="Salida" Binding="{Binding CheckOut, StringFormat=dd/MM/yyyy}" Width="*" />
                     <DataGridTextColumn Header="Estado" Binding="{Binding Status}" Width="*" />
+                    <DataGridTextColumn Header="Precio Total" Binding="{Binding TotalPrice}" Width="*"/>
+
                 </DataGrid.Columns>
+
             </DataGrid>
-        </StackPanel>
+
+        </Border>
+
     </Grid>
 </UserControl>

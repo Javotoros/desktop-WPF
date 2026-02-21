@@ -110,15 +110,24 @@ namespace DesktopApp.ViewModels
 
             var filtradas = _todas.AsEnumerable();
 
+            //Buscador Global (Habitación, Nombre o DNI)
             if (!string.IsNullOrWhiteSpace(TextoBusqueda))
             {
+                string busqueda = TextoBusqueda.ToLower().Trim();
+
                 filtradas = filtradas.Where(r =>
-                    r.Rooms?.Any(h =>
-                        h.numRoom.ToString().Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase)
-                    ) == true
+                    // Buscar en Habitaciones
+                    (r.Rooms != null && r.Rooms.Any(h => h.numRoom.ToString().Contains(busqueda))) ||
+
+                    // Buscar en el Nombre del Usuario
+                    (!string.IsNullOrEmpty(r.UserNombre) && r.UserNombre.ToLower().Contains(busqueda)) ||
+
+                    // Buscar por DNI
+                    (!string.IsNullOrEmpty(r.UserDNI) && r.UserDNI.ToLower().Contains(busqueda))
                 );
             }
 
+            // Filtro de Canceladas
             if (OcultarCanceladas)
             {
                 filtradas = filtradas.Where(r =>
@@ -126,9 +135,15 @@ namespace DesktopApp.ViewModels
                 );
             }
 
+            // Actualizar la colección de la UI
+            // Usamos una lista temporal para evitar múltiples refrescos visuales si la lista es muy grande
+            var listaFinal = filtradas.ToList();
+
             Reservas.Clear();
-            foreach (var r in filtradas)
+            foreach (var r in listaFinal)
+            {
                 Reservas.Add(r);
+            }
         }
 
         private void LimpiarFiltro()
@@ -158,17 +173,21 @@ namespace DesktopApp.ViewModels
 
             try
             {
-                bool exito = await _apiClient.CancelReservationAsync(ReservaSeleccionada.Id);
+                MessageBoxResult messageBoxResult = MessageBox.Show("¿Seguro que quieres cancelar la reserva?", "Cancelar reserva", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    bool exito = await _apiClient.CancelReservationAsync(ReservaSeleccionada.Id);
 
-                if (exito)
-                {
-                    ReservaSeleccionada.Status = "cancelada";
-                    MessageBox.Show($"Reserva ID: {ReservaSeleccionada.Id} cancelada correctamente.");
-                    AplicarFiltro();
-                }
-                else
-                {
-                    MessageBox.Show("No se pudo cancelar la reserva.");
+                    if (exito)
+                    {
+                        ReservaSeleccionada.Status = "cancelada";
+                        MessageBox.Show($"Reserva ID: {ReservaSeleccionada.Id} cancelada correctamente.");
+                        AplicarFiltro();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo cancelar la reserva.");
+                    }
                 }
             }
             catch (Exception ex)

@@ -22,7 +22,9 @@ namespace DesktopApp.Views.Reservation
                 foreach (Rooms room in lbHabitaciones.SelectedItems)
                 {
                     vm.SelectedRooms.Add(room);
-                }                
+                }
+                vm.ValidarCapacidadSeleccionada();
+                vm.ActualizarPrecioTotal();
             }            
         }
     }

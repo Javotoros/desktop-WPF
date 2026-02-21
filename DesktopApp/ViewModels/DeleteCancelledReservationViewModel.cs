@@ -102,20 +102,34 @@ namespace DesktopApp.ViewModels
 
             var filtradas = _todas.AsEnumerable();
 
+            //Buscador Global (Habitación, Nombre o DNI)
             if (!string.IsNullOrWhiteSpace(TextoBusqueda))
             {
+                string busqueda = TextoBusqueda.ToLower().Trim();
+
                 filtradas = filtradas.Where(r =>
-                    r.Rooms?.Any(h =>
-                        h.numRoom.ToString().Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase)
-                    ) == true
+                    // Buscar en Habitaciones
+                    (r.Rooms != null && r.Rooms.Any(h => h.numRoom.ToString().Contains(busqueda))) ||
+
+                    // Buscar en el Nombre del Usuario
+                    (!string.IsNullOrEmpty(r.UserNombre) && r.UserNombre.ToLower().Contains(busqueda)) ||
+
+                    // Buscar por DNI
+                    (!string.IsNullOrEmpty(r.UserDNI) && r.UserDNI.ToLower().Contains(busqueda))
                 );
             }
 
+            //Actualizar la colección de la UI
+            // Usamos una lista temporal para evitar múltiples refrescos visuales si la lista es muy grande
+            var listaFinal = filtradas.ToList();
 
             Reservas.Clear();
-            foreach (var r in filtradas)
+            foreach (var r in listaFinal)
+            {
                 Reservas.Add(r);
+            }
         }
+
 
         private void LimpiarFiltro()
         {

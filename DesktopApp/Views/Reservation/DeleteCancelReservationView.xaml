@@ -14,12 +14,17 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Eliminar Reserva" Width="140" Height="35" Margin="10,0,0,10" Command="{Binding DeleteReservationCommand}"/>
+                    
+                    <Button Content="Eliminar Reserva" Margin="10,0,0,10" 
+                            Command="{Binding DeleteReservationCommand}" 
+                            Style="{StaticResource ActionButton}" 
+                            Background="#111827" 
+                            Foreground="White"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBox x:Name="txtBuscar" Width="200" Height="35" Margin="10,0,0,10" Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
-                    <Button Content="Limpiar" Command="{Binding LimpiarCommand}" Height="35" Margin="20,0,0,10" Width="75" />
+                    <TextBox x:Name="txtBuscar" Style="{StaticResource InputTextBox}" Width="200" Margin="10,0,0,10" Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+                    <Button Content="Limpiar" Command="{Binding LimpiarCommand}"  Margin="20,0,0,10" Style="{StaticResource ActionButton}" Background="#6B7280"/>
                 </StackPanel>
             </Grid>
 
@@ -27,6 +32,7 @@
               AutoGenerateColumns="False"
               IsReadOnly="True"
               Margin="10" 
+              Style="{StaticResource ModernDataGrid}"
               ItemsSource="{Binding Reservas}"
               SelectedItem="{Binding SelectedReservation, Mode=TwoWay}">
 
@@ -38,6 +44,7 @@
                     <DataGridTextColumn Header="Entrada" Binding="{Binding CheckIn, StringFormat=dd/MM/yyyy}" Width="*" />
                     <DataGridTextColumn Header="Salida" Binding="{Binding CheckOut, StringFormat=dd/MM/yyyy}" Width="*" />
                     <DataGridTextColumn Header="Estado" Binding="{Binding Status}" Width="*" />
+                    <DataGridTextColumn Header="Precio Total" Binding="{Binding TotalPrice}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
