@@ -156,7 +156,19 @@ namespace DesktopApp.ViewModels
                 bool success = await _apiClient.DeleteReservationAsync(SelectedReservation.Id);
                 if (success)
                 {
-                    Reservas.Remove(SelectedReservation);
+                    var reservaABorrar = SelectedReservation;
+
+                    //Quitar de la lista filtrada
+                    Reservas.Remove(reservaABorrar);
+
+                    //Quitar de la fuente de datos original
+                    if (_todas != null && _todas.Contains(reservaABorrar))
+                    {
+                        _todas.Remove(reservaABorrar);
+                    }
+
+                    //Limpiar la selección para evitar errores
+                    SelectedReservation = null; 
                     MessageBox.Show("Reserva eliminada correctamente.");
                 }
             }

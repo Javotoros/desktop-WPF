@@ -104,8 +104,6 @@
                             <ComboBox SelectedItem="{Binding SelectedStatus}" Width="180" Height="35">
                                 <ComboBoxItem Content="confirmada" IsSelected="True"/>
                                 <ComboBoxItem Content="cancelada"/>
-                                <ComboBoxItem Content="checkin"/>
-                                <ComboBoxItem Content="checkout"/>
                             </ComboBox>
                         </StackPanel>
 
