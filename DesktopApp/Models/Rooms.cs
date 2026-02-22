@@ -26,7 +26,5 @@ namespace DesktopApp.Models
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Availability availability { get; set; }
-
-        public int ReviewCount { get; set; }
     }
 }

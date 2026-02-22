@@ -12,8 +12,10 @@
                 <ResourceDictionary Source="Themes/Styles.xaml"/>
                 <ResourceDictionary Source="/Resources/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Window">
+                <Setter Property="Icon" Value="/Resources/images/icoproyecto.ico"/>
+            </Style>
             <conv:ApiImageToUrlConverter x:Key="ApiImageConverter"/>
         </ResourceDictionary>
-        
     </Application.Resources>
 </Application>
