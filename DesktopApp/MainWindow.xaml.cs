@@ -6,22 +6,24 @@ namespace DesktopApp
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow() : this(false) { }
+        public MainWindow(bool skipLogin = false)
         {
             InitializeComponent();
 
             // Mostramos la ventana de login antes de iniciar MainWindow
-            var loginWindow = new LoginView();
-            bool? loginResult = loginWindow.ShowDialog();
-
-            if (loginResult != true)
+            if (!skipLogin)
             {
-                // Si el login falla o se cierra, cerramos la aplicación
-                Application.Current.Shutdown();
-                return;
+                var loginWindow = new LoginView();
+                bool? loginResult = loginWindow.ShowDialog();
+
+                if (loginResult != true)
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
             }
 
-            // Si login fue exitoso, asignamos el DataContext
             this.DataContext = new MainViewModel();
         }
     }

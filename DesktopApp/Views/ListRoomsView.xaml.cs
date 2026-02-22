@@ -55,5 +55,18 @@ namespace DesktopApp.Views
             var ok = form.ShowDialog();
             await _vm.LoadRoomsAsync();
         }
+
+        private void Reviews_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.CommandParameter is not Rooms room)
+            {
+                MessageBox.Show("Selecciona una habitación.");
+                return;
+            }
+
+            var win = new RoomReviewsWindow(room.Id, room.numRoom);
+            win.Owner = Application.Current.MainWindow;
+            win.ShowDialog();
+        }
     }
 }

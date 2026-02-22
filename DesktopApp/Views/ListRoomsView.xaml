@@ -108,11 +108,13 @@
                                                     Text="{Binding roomType}"
                                                     FontSize="18"
                                                     FontWeight="SemiBold"/>
-                                            <TextBlock
-                                                    Grid.Column="1"
-                                                    Text="{Binding ReviewCount, StringFormat=⭐ {0} reseñas}"
-                                                    FontSize="18"
-                                                    FontWeight="SemiBold"/>
+                                            <Button Grid.Column="1"
+                                                    Style="{StaticResource IconButtonStyle}"
+                                                    Click="Reviews_Click"
+                                                    CommandParameter="{Binding}"
+                                                    Margin="0 0 20 0">
+                                                <TextBlock Text="Reviews" FontWeight="SemiBold"/>
+                                            </Button>
                                         </Grid>
                                         <TextBlock Grid.Row="1"
                                                 Text="{Binding description}"
@@ -148,7 +150,6 @@
                                                        Margin="6,5,0,0"
                                                        Opacity="0.7"/>
                                             </StackPanel>
-
                                             <Button Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="Update_Click"
                                                     CommandParameter="{Binding}"
                                                     Margin="0 0 20 0">
@@ -158,7 +159,8 @@
                                             </Button>
 
                                             <Button Grid.Column="2" Style="{StaticResource IconButtonStyle}" 
-                                                    Command="{Binding DataContext.DeleteRoomCommand, RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                                    Command="{Binding DataContext.DeleteRoomCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}">
                                                 <Path Fill="{StaticResource CancelBrush}"
                                                       Width="18" Height="18" Stretch="Uniform"
                                                       Data="{StaticResource IcoDelete}"/>

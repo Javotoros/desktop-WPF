@@ -10,6 +10,7 @@ using System.Windows.Input;
 using DesktopApp.Views;
 using DesktopApp.Views.Reservation;
 using System.Windows;
+using DesktopApp.Services;
 
 namespace DesktopApp.ViewModels
 {
@@ -38,8 +39,8 @@ namespace DesktopApp.ViewModels
 
         public MainViewModel()
         {
-            SelectedMenu = "bookings";
-            CurrentView = new ListReservationView();
+            SelectedMenu = "dashboard";
+            CurrentView = new DashboardView();
             NavigateCommand = new RelayCommand(Navigation);
 
         }
@@ -54,7 +55,7 @@ namespace DesktopApp.ViewModels
             switch (key)
             {
                 case "dashboard":
-                   //CurrentView = new DashboardView();
+                   CurrentView = new DashboardView();
                     break;
                 case "users":
                     //CurrentView = new UsersView();
@@ -65,14 +66,38 @@ namespace DesktopApp.ViewModels
                 case "rooms":
                     CurrentView = new ListRoomsView();
                     break;
-                case "help":
-                    //CurrentView = new HelpView();
-                    break;
                 case "power":
-                    //CurrentView = new PowerView();
+                    Logout();
                     break;
             }
         }
+        private void Logout()
+        {
+            ApiClient.Instance.Logout();
+
+            var currentMain = Application.Current.MainWindow;
+            currentMain?.Hide();
+
+            var login = new LoginView();
+            if (currentMain != null)
+                login.Owner = currentMain;
+
+            bool? ok = login.ShowDialog();
+
+            if (ok != true)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+
+            var newMain = new MainWindow(skipLogin: true);
+            Application.Current.MainWindow = newMain;
+            newMain.Show();
+
+            currentMain?.Close();
+        }
+       
+
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? n = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));

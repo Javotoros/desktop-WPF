@@ -30,16 +30,6 @@ namespace DesktopApp.ViewModels
             set { _selectedRoom = value; OnPropertyChanged(); }
         }
 
-        private int? _reviewCount;
-        public int? ReviewCount
-        {
-            get => _reviewCount;
-            set
-            {
-                _reviewCount = value;
-                OnPropertyChanged();
-            }
-        }
         public ICommand DeleteRoomCommand { get; }
         public ListRoomsViewModel()
         {
@@ -62,7 +52,6 @@ namespace DesktopApp.ViewModels
                 foreach (var room in Rooms)
                 {
                     var reviews = await _api.GetReviewIdRoom(room.Id);
-                    room.ReviewCount = reviews?.Count ?? 0;
                 }
                 OnPropertyChanged(nameof(Rooms));
             }

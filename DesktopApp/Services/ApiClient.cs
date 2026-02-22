@@ -343,6 +343,10 @@ namespace DesktopApp.Services
                 throw;
             }
         }
+        public void Logout()
+        {
+            _token = null;
+        }
 
 
 
