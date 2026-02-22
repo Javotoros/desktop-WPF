@@ -67,6 +67,18 @@ namespace DesktopApp.ViewModels
             }
         }
 
+        private bool _ocultarTerminadas = true;
+        public bool OcultarTerminadas
+        {
+            get => _ocultarTerminadas;
+            set
+            {
+                _ocultarTerminadas = value;
+                OnPropertyChanged();
+                AplicarFiltro();
+            }
+        }
+
         public ICommand NuevaReservaCommand { get; }
         public ICommand CancelarReservaCommand { get; }
         public ICommand LimpiarCommand { get; }
@@ -135,6 +147,13 @@ namespace DesktopApp.ViewModels
                 );
             }
 
+            if (OcultarTerminadas)
+            {
+                filtradas = filtradas.Where(r =>
+                    !string.Equals(r.Status, "terminada", StringComparison.OrdinalIgnoreCase)
+                );
+            }
+
             // Actualizar la colección de la UI
             // Usamos una lista temporal para evitar múltiples refrescos visuales si la lista es muy grande
             var listaFinal = filtradas.ToList();
@@ -150,6 +169,7 @@ namespace DesktopApp.ViewModels
         {
             TextoBusqueda = "";
             OcultarCanceladas = true;
+            OcultarTerminadas = true;
             AplicarFiltro();
         }
 
