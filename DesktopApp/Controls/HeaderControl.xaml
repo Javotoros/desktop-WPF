@@ -99,7 +99,7 @@
                             Background="{StaticResource BackgroundBrush}"
                             CornerRadius="50">
                                 <Grid>
-                                    <Image Stretch="UniformToFill" Source="/Resources/images/icono_proyecto.png" />
+                                    <Image Stretch="UniformToFill" Source="/Resources/images/icono_proyecto.png" Margin="1,6,2,6" />
                                 </Grid>
                             </Border>
                         </ControlTemplate>
