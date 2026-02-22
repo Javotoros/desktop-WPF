@@ -94,7 +94,7 @@ namespace DesktopApp.ViewModels
         public User? UsuarioSeleccionado
         {
             get => _usuarioSeleccionado;
-            set { _usuarioSeleccionado = value; OnPropertyChanged(); }
+            set { _usuarioSeleccionado = value; OnPropertyChanged(); ActualizarPrecioTotal(); }
         }
 
         private string _dniBusqueda;
@@ -338,8 +338,16 @@ namespace DesktopApp.ViewModels
 
             // Sumar precios de habitaciones seleccionadas (asumiendo propiedad 'price')
             float precioPorNoche = SelectedRooms.Sum(r => r.pricePerNight);
+            float totalBase = precioPorNoche * noches;
 
-            PrecioTotal = precioPorNoche * noches;
+            if (UsuarioSeleccionado != null && UsuarioSeleccionado.VipStatus)
+            {
+                PrecioTotal = totalBase * 0.80f; // Aplicar descuento visual
+            }
+            else
+            {
+                PrecioTotal = totalBase;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
