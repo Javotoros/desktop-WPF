@@ -1,0 +1,205 @@
+﻿<Window x:Class="DesktopApp.Views.FormRoomsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopApp.Views"
+        mc:Ignorable="d"
+        Title="FormRoomsView" Height="720" Width="1200" MinWidth="820" MinHeight="720"
+        Icon="/Resources/images/icoproyecto.ico">
+    <Grid Margin="26">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ====== Header ====== -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Crear Nueva Habitación" FontSize="34" FontWeight="Bold"/>
+                <TextBlock Text="Complete los datos para registrar una nueva habitación en el sistema"
+                            Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <Button Grid.Column="2"
+                    Style="{StaticResource ActionButton}"
+                    Command="{Binding SaveCommand}"
+                    Margin="10" Cursor="Hand" Content="Guardar"                    
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+            </Button>
+            <Button Grid.Column="3"
+                    Style="{StaticResource ActionButton}"
+                        Background="#6B7280"
+                    Command="{Binding LimpiarCommand }"
+                    Margin="10"
+                    Content="Limpiar">
+            </Button>
+            <Button Grid.Column="4  "
+                    Style="{StaticResource ActionButton}"
+                    Background="#EF4444"
+                    Margin="10"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Content="Cancelar">
+            </Button>
+        </Grid>
+
+        <!-- ====== Content ====== -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- Row 1: Basic + Price -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Información Básica -->
+                    <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Información Básica" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Número de Habitación " Style="{StaticResource Label}"/>
+                                    <TextBlock MinHeight="40"
+                                        Padding="10"
+                                        VerticalAlignment="Center"
+                                        Background="#FFF3F4F6"
+                                        >
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Piso" Style="{StaticResource Label}"/>
+                                    <TextBox x:Name="numFloorText" Style="{StaticResource InputTextBox}"
+                                             Text="{Binding NewFloor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             IsEnabled="{Binding IsEditing }"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Text="Tipo de Habitación" Style="{StaticResource Label}"/>
+                            <ComboBox MinHeight="40"
+                                BorderThickness="1"
+                                Padding="10,6"
+                                ItemsSource="{Binding RoomTypes}"
+                                SelectedItem="{Binding RoomType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedIndex="-1"/>
+
+                            <TextBlock Text="Descripción" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <TextBox Style="{StaticResource InputTextBox}"
+                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="110"
+                                     VerticalContentAlignment="Top"
+                                     />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Precio y Disponibilidad -->
+                    <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Precio y Disponibilidad" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                            <TextBlock Text="Precio por Noche (€)" Style="{StaticResource Label}"/>
+                            <TextBox Style="{StaticResource InputTextBox}"
+                                     Text="{Binding PricePerNight, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+                            <TextBlock Text="Capacidad Máxima (personas)" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <DockPanel>
+                                <TextBox Style="{StaticResource InputTextBox}"
+                                         Text="{Binding MaxOccupancy, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                         DockPanel.Dock="Left"/>
+                            </DockPanel>
+
+                            <TextBlock Text="Disponibilidad" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <ComboBox MinHeight="40"
+                                      BorderThickness="1"
+                                      Padding="10,6"
+                                       SelectedItem="{Binding Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding AvailabilityOptions}"/>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!--Imagenes-->
+                    <Border Grid.ColumnSpan="3" Grid.Row="1" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Imágenes de la Habitación" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,14"/>
+
+                            <Grid Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                        IsEnabled="False"
+                                        Style="{StaticResource InputTextBox}"
+                                        Text="{Binding ImageUrlDraft, UpdateSourceTrigger=PropertyChanged}"
+                                        ToolTip="URL válida "
+                                    />
+                                <Button Grid.Column="2"
+                                    Style="{StaticResource ActionButton}"
+                                    Background="Black"
+                                    Content="Elegir archivos"
+                                    Command="{Binding PickImagesCommand}"/>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding Images}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="20" Margin="0,0,0,10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                    Text="{Binding}"
+                                                    Foreground="Red"
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <Button Grid.Column="1"
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Background="{StaticResource CancelBrush}"
+                                                        Height="40"
+                                                        VerticalAlignment="Center"
+                                                        Content="Eliminar"
+                                                        Command="{Binding DataContext.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
