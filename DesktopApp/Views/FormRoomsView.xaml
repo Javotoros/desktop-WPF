@@ -29,42 +29,25 @@
             </StackPanel>
 
             <Button Grid.Column="2"
-                    Style="{StaticResource SecondaryButton }"
+                    Style="{StaticResource ActionButton}"
                     Command="{Binding SaveCommand}"
-                    Margin="10" Cursor="Hand"                    
+                    Margin="10" Cursor="Hand" Content="Guardar"                    
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
-                <Button.Template >
-                    <ControlTemplate TargetType="Button" >
-                        <Border CornerRadius="25" Background="{StaticResource OkBrush}" Padding="10">
-                            <TextBlock Text="Guardar" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
             </Button>
             <Button Grid.Column="3"
-                    Style="{StaticResource SecondaryButton }"
+                    Style="{StaticResource ActionButton}"
+                        Background="#6B7280"
                     Command="{Binding LimpiarCommand }"
-                    Margin="10">
-                <Button.Template >
-                    <ControlTemplate TargetType="Button" >
-                        <Border CornerRadius="25" Background="{StaticResource UpdateBrush}" Padding="10">
-                            <TextBlock Text="Limpiar" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
+                    Margin="10"
+                    Content="Limpiar">
             </Button>
             <Button Grid.Column="4  "
-                    Style="{StaticResource SecondaryButton }"
+                    Style="{StaticResource ActionButton}"
+                    Background="#EF4444"
                     Margin="10"
                     Command="{Binding CancelCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
-                <Button.Template >
-                    <ControlTemplate TargetType="Button" >
-                        <Border CornerRadius="25" Background="{StaticResource CancelBrush}" Padding="10">
-                            <TextBlock Text="Cancelar" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Content="Cancelar">
             </Button>
         </Grid>
 
@@ -87,7 +70,7 @@
                     <!-- Información Básica -->
                     <Border Grid.Column="0" Style="{StaticResource CardBorder}">
                         <StackPanel>
-                            <TextBlock Text="Información Básica" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
+                            <TextBlock Text="Información Básica" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
 
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions>
@@ -101,17 +84,8 @@
                                     <TextBlock MinHeight="40"
                                         Padding="10"
                                         VerticalAlignment="Center"
-                                        Background="#FFF3F4F6">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Text" Value="{Binding NextRoom}"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsEditing}" Value="false">
-                                                        <Setter Property="Text" Value="{Binding CurrentRoom}"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
+                                        Background="#FFF3F4F6"
+                                        >
                                     </TextBlock>
                                 </StackPanel>
 
@@ -137,14 +111,15 @@
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MinHeight="110"
-                                     VerticalContentAlignment="Top"/>
+                                     VerticalContentAlignment="Top"
+                                     />
                         </StackPanel>
                     </Border>
 
                     <!-- Precio y Disponibilidad -->
                     <Border Grid.Column="2" Style="{StaticResource CardBorder}">
                         <StackPanel>
-                            <TextBlock Text="Precio y Disponibilidad" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
+                            <TextBlock Text="Precio y Disponibilidad" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
 
                             <TextBlock Text="Precio por Noche (€)" Style="{StaticResource Label}"/>
                             <TextBox Style="{StaticResource InputTextBox}"
@@ -170,7 +145,7 @@
                     <!--Imagenes-->
                     <Border Grid.ColumnSpan="3" Grid.Row="1" Style="{StaticResource CardBorder}">
                         <StackPanel>
-                            <TextBlock Text="Imágenes de la Habitación" FontSize="18" FontWeight="Bold" Margin="0,0,0,14"/>
+                            <TextBlock Text="Imágenes de la Habitación" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,14"/>
 
                             <Grid Margin="0,0,0,14">
                                 <Grid.ColumnDefinitions>
@@ -187,7 +162,8 @@
                                         ToolTip="URL válida "
                                     />
                                 <Button Grid.Column="2"
-                                    Style="{StaticResource PrimaryButton}"
+                                    Style="{StaticResource ActionButton}"
+                                    Background="Black"
                                     Content="Elegir archivos"
                                     Command="{Binding PickImagesCommand}"/>
                             </Grid>

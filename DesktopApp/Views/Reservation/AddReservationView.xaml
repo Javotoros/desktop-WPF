@@ -13,7 +13,7 @@
 
             <Border Style="{StaticResource CardBorder}">
                 <StackPanel>
-                    <TextBlock Text="Información del Cliente" Style="{StaticResource Label}" FontSize="16" Margin="0,0,0,15"/>
+                    <TextBlock Text="Información del Cliente" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,15"/>
 
                     <TextBlock Text="Buscar por DNI" Style="{StaticResource Label}"/>
                     <TextBox Text="{Binding DNIBusqueda, UpdateSourceTrigger=PropertyChanged}" 
@@ -29,7 +29,7 @@
 
             <Border Style="{StaticResource CardBorder}">
                 <StackPanel>
-                    <TextBlock Text="Fechas de Estancia" Style="{StaticResource Label}" FontSize="16" Margin="0,0,0,15"/>
+                    <TextBlock Text="Fechas de Estancia" Style="{StaticResource Label}"  FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -52,6 +52,7 @@
             </Border>
             <Border Style="{StaticResource CardBorder}">
                 <StackPanel Margin="0,10,0,0">
+                    <TextBlock Text="Selección de Personas" Style="{StaticResource Label}" FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
                     <TextBlock Text="Número de Personas" Style="{StaticResource Label}"/>
                     <TextBox Text="{Binding NumeroPersonas, UpdateSourceTrigger=PropertyChanged}" 
                  Style="{StaticResource InputTextBox}" Width="100" HorizontalAlignment="Left"/>
@@ -59,7 +60,7 @@
             </Border>
             <Border Style="{StaticResource CardBorder}">
                 <StackPanel>
-                    <TextBlock Text="Selección de Habitaciones" Style="{StaticResource Label}" FontSize="16" Margin="0,0,0,5"/>
+                    <TextBlock Text="Selección de Habitaciones" Style="{StaticResource Label}" FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
                     <TextBlock Text="{Binding MensajeAvisoCapacidad}" 
                        Foreground="#DC2626" 
                        FontWeight="SemiBold"
