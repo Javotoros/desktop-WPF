@@ -28,7 +28,9 @@
 
   <ItemGroup>
     <Resource Include="Resources\images\icono_proyecto.png" />
-    <Resource Include="Resources\images\icoproyecto.ico" />
+    <Resource Include="Resources\images\icoproyecto.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

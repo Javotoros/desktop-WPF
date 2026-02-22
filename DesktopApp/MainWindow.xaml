@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DesktopApp"
         mc:Ignorable="d"
         xmlns:controls="clr-namespace:DesktopApp.Controls"
-        Title="MainWindow" Height="720" Width="1280" MinWidth="1024" MinHeight="600">
+        Title="MainWindow" Height="720" Width="1280" MinWidth="1024" MinHeight="600"
+        Icon="/Resources/images/icoproyecto.ico">
    
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.ColumnDefinitions >

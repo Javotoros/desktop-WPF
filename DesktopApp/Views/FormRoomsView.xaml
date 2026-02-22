@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopApp.Views"
         mc:Ignorable="d"
-        Title="FormRoomsView" Height="720" Width="1200" MinWidth="820" MinHeight="720">
+        Title="FormRoomsView" Height="720" Width="1200" MinWidth="820" MinHeight="720"
+        Icon="/Resources/images/icoproyecto.ico">
     <Grid Margin="26">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

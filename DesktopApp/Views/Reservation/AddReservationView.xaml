@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Nueva Reserva" Height="850" Width="550" 
-        WindowStartupLocation="CenterOwner" Background="{StaticResource BackgroundBrush}">
+        WindowStartupLocation="CenterOwner" Background="{StaticResource BackgroundBrush}"
+        Icon="/Resources/images/icoproyecto.ico">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">

@@ -16,7 +16,7 @@ namespace DesktopApp.Services
         private readonly HttpClient _httpClient;
         private static string _token;
 
-        private const string BASE_URL = "http://51.255.203.137";
+        private const string BASE_URL = "http://localhost:3000";
 
         public ApiClient()
         {
