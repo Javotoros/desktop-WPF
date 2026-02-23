@@ -31,6 +31,11 @@ namespace DesktopApp.ViewModels
         // Cliente para llamar a la API (GET/POST/PATCH/DELETE)
         private readonly ApiClient _api = new ApiClient();
 
+        public ObservableCollection<ServiceItem> ServiceOptions { get; } = new();
+
+        public List<string> SelectedServices =>
+            ServiceOptions.Where(s => s.IsSelected).Select(s => s.Key).ToList();
+
         // Evento necesario para que WPF actualice la vista cuando cambian propiedades (binding)
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -183,12 +188,25 @@ namespace DesktopApp.ViewModels
         {
 
             IsEditing = true;
+
+            ServiceOptions.Add(new ServiceItem("wifi", "Wi-Fi"));
+            ServiceOptions.Add(new ServiceItem("parking", "Parking"));
+            ServiceOptions.Add(new ServiceItem("gym", "Gimnasio"));
+            ServiceOptions.Add(new ServiceItem("towels", "Toallas"));
+            ServiceOptions.Add(new ServiceItem("smoke", "Fumar"));
+            ServiceOptions.Add(new ServiceItem("crib", "Cuna"));
+
+            foreach (var s in ServiceOptions)
+                s.PropertyChanged += (_, __) => CommandManager.InvalidateRequerySuggested();
+
             SaveCommand = new RelayCommand(async _ => await SendDataRooms(), _ => CanSave());
             CancelCommand = new RelayCommand(w => CloseWindow(w as Window));
             LimpiarCommand = new RelayCommand(_ => Clean());
 
             PickImagesCommand = new RelayCommand(_ => PickImages());
             RemoveImageCommand = new RelayCommand(p => RemoveImage(p as string));
+
+
 
 
         }
@@ -200,6 +218,12 @@ namespace DesktopApp.ViewModels
         public FormRoomsViewModel(Rooms room) : this()
         {
             SelectedRoom = room;
+
+            if (room.services != null)
+            {
+                foreach (var opt in ServiceOptions)
+                    opt.IsSelected = room.services.Contains(opt.Key);
+            }
             IsEditing = false;
             CurrentRoom = room.numRoom;
             NewFloor = room.numFloor;
@@ -329,6 +353,7 @@ namespace DesktopApp.ViewModels
         }
         private void Clean()
         {
+            foreach (var s in ServiceOptions) s.IsSelected = false;
             NewFloor = null;
             RoomType = null;
             Description = null;
@@ -340,6 +365,7 @@ namespace DesktopApp.ViewModels
         }
         private void CleanUpdate()
         {
+            foreach (var s in ServiceOptions) s.IsSelected = false;
             RoomType = null;
             Description = null;
             PricePerNight = null;
@@ -385,7 +411,8 @@ namespace DesktopApp.ViewModels
                     Description ?? "",
                     PricePerNight!.Value,
                     MaxOccupancy!.Value,
-                    Availability.Value.ToString()
+                    Availability.Value.ToString(),
+                    SelectedServices
                 );
 
 
@@ -430,7 +457,8 @@ namespace DesktopApp.ViewModels
                     Description ?? "",
                     PricePerNight!.Value,
                     MaxOccupancy!.Value,
-                    Availability.Value.ToString()
+                    Availability.Value.ToString(),
+                    SelectedServices
                 );
 
                 if (LocalImagesToUpload.Count > 0)
