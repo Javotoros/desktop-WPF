@@ -24,6 +24,8 @@ namespace DesktopApp.Models
         public int maxOccupancy { get; set; }
         public enum Availability { Available, Unavailable, Block }
 
+        public List<string> services { get; set; } = new();
+
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Availability availability { get; set; }
     }

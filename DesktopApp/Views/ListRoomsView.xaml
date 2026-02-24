@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-
     <Grid>
         <Border Style="{StaticResource CardStyle}"
         HorizontalAlignment="Center"
@@ -18,51 +17,51 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
-                            Margin="0,0,0,10"
+                            Margin="0,10,10,10"
                             Orientation="Horizontal"
                             HorizontalAlignment="Center">
-                    <Button Style="{StaticResource IconButtonStyle}" Click="Save_Click">
-                        <Path Fill="{StaticResource PrimaryBrush}"
-                              Width="18" Height="18" Stretch="Uniform"
-                              Data="{StaticResource IcoAdd}"/>
+                    <Button Style="{StaticResource ActionButton}" Background="{StaticResource SecondaryBrush}" Click="Save_Click" Content="Añadir">
                     </Button>
                 </StackPanel>
 
                 <ListBox Grid.Row="1"
-                         Padding="20"
+                         MinWidth="980"
+                         Padding="50 20 50 20"
                          ItemsSource="{Binding Rooms}"
                          SelectedItem="{Binding SelectedRoom}"
+                         Background="{StaticResource BackgroundBrush2}"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Padding" Value="0"/>
-                            <Setter Property="Margin" Value="0,0,12,12"/>
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Margin" Value="0,0,20,20"/>
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Setter Property="VerticalContentAlignment" Value="Top"/>
                         </Style>
                     </ListBox.ItemContainerStyle>
 
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="2"/>
+                            <WrapPanel/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
 
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource CardStyle}"
-                                    Padding="0"
-                                    Margin="0">
+                            <Border Style="{StaticResource CardStyleInside}" Width="320" CornerRadius="15" ClipToBounds="True" >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="170"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    
-                                    <Grid Grid.Row="0" ClipToBounds="True">
+                                    <Border Grid.Row="0"
+                                        CornerRadius="15,15,0,0"
+                                        ClipToBounds="True"
+                                        Background="#FFEFEFEF">
+                                        <Grid >
+                                        
                                         <Image Stretch="UniformToFill"
                                                Source="{Binding image, Converter={StaticResource ApiImageConverter}}"/>
 
@@ -96,16 +95,32 @@
                                         </Border>
 
                                         <Border CornerRadius="10"
-                                                Padding="10,4"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Top"
-                                                Margin="12"
-                                                Background="{StaticResource AccentBrush}">
-                                            <TextBlock Text="{Binding availability}"/>
+                                            Padding="10,4"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Margin="12">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding availability}" Value="available">
+                                                            <Setter Property="Background" Value="Green"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding availability}" Value="unavailable">
+                                                            <Setter Property="Background" Value="Red"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding availability}" Value="block">
+                                                            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding availability}"
+                                                Foreground="White"
+                                                FontWeight="SemiBold"/>
                                         </Border>
                                     </Grid>
+                                 </Border>
 
-                                    
                                     <Grid Grid.Row="1" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -115,86 +130,53 @@
 
                                        
                                         <StackPanel Grid.Column="0" >
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <TextBlock Grid.Column="0"
-                                                           Text="{Binding roomType}"
-                                                           FontSize="18"
-                                                           FontWeight="SemiBold"
-                                                           TextTrimming="CharacterEllipsis"/>
-
-                                                
-                                            </Grid>
-
+                                            <TextBlock Grid.Column="0"
+                                                Text="{Binding roomType}"
+                                                FontSize="18"
+                                                FontWeight="SemiBold"
+                                                TextTrimming="CharacterEllipsis"
+                                                Padding="10 10 0 0"/>
                                             <TextBlock Text="{Binding description}"
                                                        Margin="0,8,0,0"
                                                        Opacity="0.8"
                                                        TextWrapping="Wrap"
                                                        MaxHeight="48"
-                                                       TextTrimming="CharacterEllipsis"/>
-                                            <Border CornerRadius="50" Width="100">
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Padding="10 0 0 0"/>
+                                            <Border CornerRadius="20" Width="100" Background="{StaticResource SecondaryBrush}" Margin="10">
                                                 <Button Grid.Column="1"
-                                                    Background="{StaticResource PrimaryBrush}"                                                   
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
                                                     Click="Reviews_Click"
                                                     CommandParameter="{Binding}"
-                                                    Margin="0 30 0 0">
-                                                    <TextBlock Text="Reviews" FontWeight="SemiBold"/>
+                                                    Padding="10">
+                                                    <TextBlock Text="Reviews" FontWeight="SemiBold" Foreground="White"/>
                                                 </Button>
                                             </Border>
                                         </StackPanel>
-
                                         
-                                        <StackPanel Grid.Column="2">
-                                            <Grid Margin="0,2,0,0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <TextBlock Text="Piso:" Opacity="0.7"/>
-                                                <TextBlock Grid.Column="1"
-                                                           HorizontalAlignment="Right"
-                                                           Text="{Binding numFloor}"/>
-                                            </Grid>
-
-                                            <Grid Margin="0,6,0,0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <TextBlock Text="Máx:" Opacity="0.7"/>
-                                                <TextBlock Grid.Column="1"
-                                                           HorizontalAlignment="Right"
-                                                           Text="{Binding maxOccupancy, StringFormat={}{0} pers.}"/>
-                                            </Grid>
-
-                                            <Border Margin="0,10,0,0"
-                                                    CornerRadius="10"
-                                                    Padding="10,6"
-                                                    Background="#0F000000">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <TextBlock Text="{Binding pricePerNight, StringFormat=€ {0:0}}"
-                                                               FontSize="18"
-                                                               FontWeight="SemiBold"
-                                                               Foreground="#0AA36C"/>
-                                                    <TextBlock Text=" / noche" Margin="6,4,0,0" Opacity="0.7"/>
-                                                </StackPanel>
-                                            </Border>
-
+                                        <StackPanel Grid.Column="2" >
+                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="0 0 10 10">
+                                                <TextBlock Text="{Binding pricePerNight, StringFormat=€ {0:0}}"
+                                                    FontSize="18"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#0AA36C"/>
+                                                <TextBlock Text="por noche" Style="{StaticResource Subtitulo1}"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1"
+                                                HorizontalAlignment="Right"
+                                                Margin="0 0 10 0"
+                                                Text="{Binding maxOccupancy, StringFormat={}{0} personas}" Style="{StaticResource Subtitulo1}"/>
                                             <StackPanel Orientation="Horizontal"
                                                         HorizontalAlignment="Right"
-                                                        Margin="0,10,0,0">
-                                                <Button Style="{StaticResource IconButtonStyle}"
+                                                        Margin="0,10,20,0">
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
                                                         Click="Update_Click"
                                                         CommandParameter="{Binding}"
                                                         Margin="0,0,10,0">
                                                     <Path Fill="{StaticResource UpdateBrush}"
-                                                          Width="18" Height="18" Stretch="Uniform"
+                                                          Width="30" Height="30" Stretch="Uniform"
                                                           Data="{StaticResource IcoUpdate}"/>
                                                 </Button>
 
@@ -202,7 +184,7 @@
                                                         Command="{Binding DataContext.DeleteRoomCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                         CommandParameter="{Binding}">
                                                     <Path Fill="{StaticResource CancelBrush}"
-                                                          Width="18" Height="18" Stretch="Uniform"
+                                                          Width="30" Height="30" Stretch="Uniform"
                                                           Data="{StaticResource IcoDelete}"/>
                                                 </Button>
                                             </StackPanel>

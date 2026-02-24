@@ -36,8 +36,6 @@ namespace DesktopApp.Converters
 
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(url, UriKind.Absolute);
-
-                // 🔴 ESTAS DOS LÍNEAS SON LA CLAVE
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
 

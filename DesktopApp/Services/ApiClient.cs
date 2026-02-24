@@ -110,7 +110,7 @@ namespace DesktopApp.Services
             int newRoom = JsonSerializer.Deserialize<int>(json);
             return newRoom;
         }
-        public async Task<string> PostRooms(int numFloor, string roomType, string description, int pricePerNight, int maxOccupancy, string availability)
+        public async Task<string> PostRooms(int numFloor, string roomType, string description, int pricePerNight, int maxOccupancy, string availability,List<string> services)
         {
             var values = new Dictionary<string, string>()
                 {
@@ -119,7 +119,8 @@ namespace DesktopApp.Services
                     { "description",description},
                     { "pricePerNight",pricePerNight.ToString()},
                     { "maxOccupancy",maxOccupancy.ToString()},
-                    { "availability",availability.ToLower()}
+                    { "availability",availability.ToLower()},
+                    { "services", JsonSerializer.Serialize(services ?? new List<string>()) }
                  };
             var content = new FormUrlEncodedContent(values);
             var response = await _httpClient.PostAsync("rooms/add", content);
@@ -130,7 +131,7 @@ namespace DesktopApp.Services
             return body;
         }
 
-        public async Task updateIdRoom(string id, string roomType, string description, int pricePerNight, int maxOccupancy, string availability)
+        public async Task updateIdRoom(string id, string roomType, string description, int pricePerNight, int maxOccupancy, string availability,List<string> services)
         {
             var values = new Dictionary<string, string>()
                 {
@@ -138,7 +139,8 @@ namespace DesktopApp.Services
                     { "description",description},
                     { "pricePerNight",pricePerNight.ToString()},
                     { "maxOccupancy",maxOccupancy.ToString()},
-                    { "availability",availability.ToLower()}
+                    { "availability",availability.ToLower()},
+                    { "services", JsonSerializer.Serialize(services ?? new List<string>()) }
                  };
             var content = new FormUrlEncodedContent(values);
             var response = await _httpClient.PatchAsync($"rooms/modify/{id}", content);

@@ -7,30 +7,30 @@
         mc:Ignorable="d"
         Title="Reviews"
         Height="520" Width="720"
-        WindowStartupLocation="CenterOwner">
-    <Grid Margin="16">
-    <ListBox ItemsSource="{Binding Reviews}">
+        WindowStartupLocation="CenterOwner"
+        Icon="/Resources/images/icoproyecto.ico">
+    <Grid >
+        <ListBox ItemsSource="{Binding Reviews}"  HorizontalContentAlignment="Stretch" >
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Border CornerRadius="12" Background="White" Padding="12" Margin="0,0,0,10">
-                    <StackPanel>
+               <Border CornerRadius="12" Background="{StaticResource BackgroundBrush2}" Padding="12" Margin="0,0,0,10">
+                    <StackPanel >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{Binding UserDisplay}"
-                                           FontWeight="SemiBold"
-                                           FontSize="16"/>
-
-                            <TextBlock Grid.Column="1" FontSize="16" FontWeight="SemiBold">
+                                <TextBlock Text="{Binding UserDisplay}"
+                                    FontWeight="SemiBold"
+                                    FontSize="16"/>
+                                <TextBlock Grid.Column="1" FontSize="16" FontWeight="SemiBold">
                                     <Run Text="{Binding Rating}"/>
                                     <Run Text=" estrellas"/>
                              </TextBlock>
                             </Grid>
 
-                        <TextBlock Margin="0,8,0,0"
+                        <TextBlock Margin="0,8,0,0" 
                                        Text="{Binding Comment}"
                                        TextWrapping="Wrap"
                                        Opacity="0.85"/>
