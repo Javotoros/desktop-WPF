@@ -12,8 +12,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <!-- ====== Header ====== -->
         <Grid Grid.Row="0" Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -22,11 +20,15 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
             <StackPanel>
-                <TextBlock Text="Crear Nueva Habitación" FontSize="34" FontWeight="Bold"/>
+                <TextBlock Text="Crear Nueva Habitación" FontSize="34" FontWeight="Bold" Style="{StaticResource Titulo1}"/>
                 <TextBlock Text="Complete los datos para registrar una nueva habitación en el sistema"
-                            Margin="0,6,0,0"/>
+                            Margin="0,6,0,0" Style="{StaticResource Subtitulo1}"/>
             </StackPanel>
 
             <Button Grid.Column="2"
@@ -35,6 +37,7 @@
                     Margin="10" Cursor="Hand" Content="Guardar"                    
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
             </Button>
+            
             <Button Grid.Column="3"
                     Style="{StaticResource ActionButton}"
                         Background="#6B7280"
@@ -50,13 +53,12 @@
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                     Content="Cancelar">
             </Button>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding CanSaveMessage}" TextAlignment="Right"
+                Foreground="Red"
+                Margin="0,6,0,0" />
         </Grid>
-
-        <!-- ====== Content ====== -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-
-                <!-- Row 1: Basic + Price -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -67,11 +69,9 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <!-- Información Básica -->
                     <Border Grid.Column="0" Style="{StaticResource CardBorder}">
                         <StackPanel>
-                            <TextBlock Text="Información Básica" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+                            <TextBlock Text="Información Básica" Style="{StaticResource Titulo1}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
 
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions>
@@ -81,34 +81,47 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Número de Habitación " Style="{StaticResource Label}"/>
-                                    <TextBlock MinHeight="40"
-                                        Padding="10"
-                                        VerticalAlignment="Center"
-                                        Background="#FFF3F4F6"
-                                        Text="{Binding NextRoom, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock Style="{StaticResource Titulo2}" >
+                                        <Run Text="Número de Habitación " />
+                                        <Run Text="*" Foreground="Orange" />
                                     </TextBlock>
+
+                                    <Border Style="{StaticResource bordePaleta}">
+                                        <TextBlock MinHeight="40"
+                                            Padding="10"
+                                            Style="{StaticResource itemhijo2}"
+                                            VerticalAlignment="Center"
+                                            Background="Transparent"                                       
+                                            Text="{Binding NextRoom, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBlock>
+                                    </Border>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Piso" Style="{StaticResource Label}"/>
+                                    <TextBlock  Style="{StaticResource Titulo2}">
+                                        <Run Text="Piso " />
+                                        <Run Text="*" Foreground="Red" />
+                                    </TextBlock>
                                     <TextBox x:Name="numFloorText" Style="{StaticResource InputTextBox}"
-                                             Text="{Binding NewFloor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             Text="{Binding NewFloor, UpdateSourceTrigger=PropertyChanged,TargetNullValue='',FallbackValue='', ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
                                              IsEnabled="{Binding IsEditing }"/>
                                 </StackPanel>
                             </Grid>
 
-                            <TextBlock Text="Tipo de Habitación" Style="{StaticResource Label}"/>
+                            <TextBlock Text="Tipo de Habitación" Style="{StaticResource Titulo2}">
+                                <Run Text="Tipo de Habitación" />
+                                <Run Text="*" Foreground="Red" />
+                            </TextBlock>
                             <ComboBox MinHeight="40"
                                 BorderThickness="1"
                                 Padding="10,6"
                                 ItemsSource="{Binding RoomTypes}"
-                                SelectedItem="{Binding RoomType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding RoomType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
                                 SelectedIndex="-1"/>
 
-                            <TextBlock Text="Descripción" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <TextBlock Text="Descripción" Style="{StaticResource Titulo2}" Margin="0,14,0,0"/>
                             <TextBox Style="{StaticResource InputTextBox}"
-                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MinHeight="110"
@@ -116,31 +129,38 @@
                                      />
                         </StackPanel>
                     </Border>
-
-                    <!-- Precio y Disponibilidad -->
                     <Border Grid.Column="2" Style="{StaticResource CardBorder}">
                         <StackPanel>
-                            <TextBlock Text="Precio y Disponibilidad" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+                            <TextBlock Text="Precio y Disponibilidad" Style="{StaticResource Titulo1}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
 
-                            <TextBlock Text="Precio por Noche (€)" Style="{StaticResource Label}"/>
+                            <TextBlock Style="{StaticResource Titulo2}">
+                                <Run Text="Precio por Noche (€) " />
+                                <Run Text="*" Foreground="Red" />
+                            </TextBlock>
                             <TextBox Style="{StaticResource InputTextBox}"
-                                     Text="{Binding PricePerNight, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                     Text="{Binding PricePerNight, UpdateSourceTrigger=PropertyChanged,TargetNullValue='',FallbackValue='', ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
 
-                            <TextBlock Text="Capacidad Máxima (personas)" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <TextBlock  Style="{StaticResource Titulo2}" Margin="0,14,0,0">
+                                <Run Text="Capacidad Máxima (personas)" />
+                                <Run Text="*" Foreground="Red" />
+                            </TextBlock>
                             <DockPanel>
                                 <TextBox Style="{StaticResource InputTextBox}"
-                                         Text="{Binding MaxOccupancy, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                         Text="{Binding MaxOccupancy, UpdateSourceTrigger=PropertyChanged,TargetNullValue='',FallbackValue='', ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
                                          DockPanel.Dock="Left"/>
                             </DockPanel>
 
-                            <TextBlock Text="Disponibilidad" Style="{StaticResource Label}" Margin="0,14,0,0"/>
+                            <TextBlock Style="{StaticResource Titulo2}" Margin="0,14,0,0">
+                                <Run Text="Disponibilidad" />
+                                <Run Text="*" Foreground="Red" />
+                            </TextBlock>
                             <ComboBox MinHeight="40"
                                       BorderThickness="1"
                                       Padding="10,6"
-                                       SelectedItem="{Binding Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       SelectedItem="{Binding Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
                                       ItemsSource="{Binding AvailabilityOptions}"/>
 
-                            <TextBlock Text="Servicios" Style="{StaticResource Label}" Margin="0,14,0,6"/>
+                            <TextBlock Text="Servicios" Style="{StaticResource Titulo2}" Margin="0,14,0,6" Background="Transparent" />
 
                             <ItemsControl ItemsSource="{Binding ServiceOptions}">
                                 <ItemsControl.ItemsPanel>
@@ -151,20 +171,30 @@
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <CheckBox
+                                        <Border
+                                            Background="{StaticResource BackgroundBrush2}"
+                                            BorderBrush="Black"
+                                            BorderThickness="1.5"
+                                            CornerRadius="10"
+                                            Padding="12,8"
+                                            Margin="8">
+
+                                            <CheckBox
                                                 Content="{Binding Name}"
-                                                IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Margin="0,0,14,10"/>
+                                                IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}"
+                                                Background="White"
+                                                BorderThickness="0"
+                                                FontWeight="SemiBold"
+                                                Foreground="#1F2A44"/>
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
                     </Border>
-
-                    <!--Imagenes-->
                     <Border Grid.ColumnSpan="3" Grid.Row="1" Style="{StaticResource CardBorder}">
                         <StackPanel>
-                            <TextBlock Text="Imágenes de la Habitación" Style="{StaticResource Label}" FontSize="16" FontWeight="Bold" Margin="0,0,0,14"/>
+                            <TextBlock Text="Imágenes de la Habitación" Style="{StaticResource Titulo1}" FontSize="16" FontWeight="Bold" Margin="0,0,0,14"/>
 
                             <Grid Margin="0,0,0,14">
                                 <Grid.ColumnDefinitions>
@@ -177,7 +207,7 @@
                                 <TextBox Grid.Column="0"
                                         IsEnabled="False"
                                         Style="{StaticResource InputTextBox}"
-                                        Text="{Binding ImageUrlDraft, UpdateSourceTrigger=PropertyChanged}"
+                                        Text="{Binding ImageUrlDraft, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}"
                                         ToolTip="URL válida "
                                     />
                                 <Button Grid.Column="2"

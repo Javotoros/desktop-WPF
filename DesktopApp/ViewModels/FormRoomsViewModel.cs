@@ -26,11 +26,16 @@ namespace DesktopApp.ViewModels
     /// - Validar campos para habilitar/deshabilitar el botón Guardar
     /// - Gestionar imágenes (seleccionar, quitar, subir y borrar)
     /// </summary>
-    public class FormRoomsViewModel : INotifyPropertyChanged
+    public class FormRoomsViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         // Cliente para llamar a la API (GET/POST/PATCH/DELETE)
         private readonly ApiClient _api = new ApiClient();
 
+        private readonly Dictionary<string, List<string>> _errors = new();
+
+        public bool HasErrors => _errors.Any();
+
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
         public ObservableCollection<ServiceItem> ServiceOptions { get; } = new();
 
         public List<string> SelectedServices =>
@@ -54,6 +59,26 @@ namespace DesktopApp.ViewModels
 
         // Copia de las imágenes originales para saber qué había antes al editar
         private List<string> _originalRemoteImages = new();
+
+
+        public string CanSaveMessage
+        {
+            get
+            {
+                if (!NewFloor.HasValue) return "Escribe un piso númerico correcto 1-7.";
+                if (NewFloor < 1 || NewFloor > 7) return "La planta debe estar entre 1 y 7.";
+                if (!RoomType.HasValue) return "Selecciona el tipo de habitación.";
+                if (!PricePerNight.HasValue) return "Indica el precio por noche en formato númerico.";
+                if (PricePerNight < 1) return "El precio debe ser mayor que 0.";
+                if (!MaxOccupancy.HasValue) return "Indica las personas máximas en formato númerico.";
+                if (MaxOccupancy < 1 || MaxOccupancy > 4) return "Las personas deben ser 1–4.";
+                if (!Availability.HasValue) return "Selecciona la disponibilidad.";
+                if (HasErrors) return "Corrige los campos marcados en rojo.";
+                return "Todo correcto.";
+            }
+        }
+
+
 
         // Texto informativo de la cantidad de img
         private string? _imageUrlDraft;
@@ -109,8 +134,17 @@ namespace DesktopApp.ViewModels
             {
                 _newFloor = value;
                 OnPropertyChanged();
+                if (!_newFloor.HasValue)
+                    SetErrors(nameof(NewFloor), "La planta es obligatoria.");
+                else if (_newFloor < 1 || _newFloor > 7)
+                    SetErrors(nameof(NewFloor), "La planta debe estar entre 1 y 7.");
+                else
+                    SetErrors(nameof(NewFloor));
+
+
                 _ = LoadNextRoom();
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(CanSaveMessage));
             }
         }
 
@@ -123,7 +157,11 @@ namespace DesktopApp.ViewModels
             {
                 _roomType = value;
                 OnPropertyChanged();
+                if (!_roomType.HasValue) SetErrors(nameof(RoomType), "El tipo de habitación es obligatorio.");
+                else SetErrors(nameof(RoomType));
+
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(CanSaveMessage));
             }
         }
 
@@ -146,7 +184,15 @@ namespace DesktopApp.ViewModels
             {
                 _pricePerNight = value;
                 OnPropertyChanged();
+                if (!_pricePerNight.HasValue)
+                    SetErrors(nameof(PricePerNight), "El precio es obligatorio.");
+                else if (_pricePerNight < 1)
+                    SetErrors(nameof(PricePerNight), "El precio debe ser mayor que 0.");
+                else
+                    SetErrors(nameof(PricePerNight));
+
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(CanSaveMessage));
             }
         }
 
@@ -158,7 +204,15 @@ namespace DesktopApp.ViewModels
             {
                 _maxOccupancy = value;
                 OnPropertyChanged();
+                if (!_maxOccupancy.HasValue)
+                    SetErrors(nameof(MaxOccupancy), "La capacidad es obligatoria.");
+                else if (_maxOccupancy < 1 || _maxOccupancy > 4)
+                    SetErrors(nameof(MaxOccupancy), "La capacidad debe estar entre 1 y 4.");
+                else
+                    SetErrors(nameof(MaxOccupancy));
+
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(CanSaveMessage));
             }
         }
 
@@ -170,7 +224,11 @@ namespace DesktopApp.ViewModels
             {
                 _availability = value;
                 OnPropertyChanged();
+                if (!_availability.HasValue) SetErrors(nameof(Availability), "La disponibilidad es obligatoria.");
+                else SetErrors(nameof(Availability));
+
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(CanSaveMessage));
             }
         }
 
@@ -382,7 +440,7 @@ namespace DesktopApp.ViewModels
         private async Task LoadNextRoom()
 
         {
-            if (NewFloor is null || NewFloor < 1 || NewFloor > 7)
+            if (!NewFloor.HasValue || NewFloor < 1 || NewFloor > 7)
             {
                 NextRoom = 0;
                 return;
@@ -503,6 +561,28 @@ namespace DesktopApp.ViewModels
         private void CloseWindow(Window? w)
         {
             w?.Close();
+        }
+
+
+        public System.Collections.IEnumerable GetErrors(string? propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+                return _errors.SelectMany(e => e.Value);
+
+            return _errors.TryGetValue(propertyName, out var list) ? list : Enumerable.Empty<string>();
+        }
+
+        private void SetErrors(string propertyName, params string[] errors)
+        {
+            if (errors == null || errors.Length == 0)
+            {
+                if (_errors.Remove(propertyName))
+                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+                return;
+            }
+
+            _errors[propertyName] = errors.ToList();
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
         /// <summary>
